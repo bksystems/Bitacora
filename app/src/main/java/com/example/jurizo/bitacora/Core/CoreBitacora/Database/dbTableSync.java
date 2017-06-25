@@ -1,12 +1,12 @@
 package com.example.jurizo.bitacora.Core.CoreBitacora.Database;
 
 /**
- * Created by jurizo on 22/06/17.
+ * Created by Carlos Rizo on 25/06/2017.
  */
 
-public class dbTableOficinas {
+public class dbTableSync {
 
-    public static String TableName = "Oficinas";
+    public static String TableName = "SyncDataBase";
 
     private static String OficinaId = "id INTEGER PRIMARY KEY AUTOINCREMENT, ";
     private static String OficinaCC = "cc integer, ";
@@ -33,5 +33,4 @@ public class dbTableOficinas {
             + ");";
 
     public static String OnDelete = "Drop Table " + TableName + ";";
-
 }
