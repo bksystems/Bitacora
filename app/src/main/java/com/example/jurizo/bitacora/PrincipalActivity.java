@@ -1,23 +1,23 @@
 package com.example.jurizo.bitacora;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.service.carrier.CarrierService;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Switch;
 
-import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DBHelper;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.SyncServices.SyncManager;
 
 public class PrincipalActivity extends AppCompatActivity {
 
+    private Activity context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        context = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
         prepareDatabase();
@@ -46,6 +46,10 @@ public class PrincipalActivity extends AppCompatActivity {
                 Intent visit_intent = new Intent(this, VisitActivity.class);
                 startActivity(visit_intent);
                 return true;
+            case R.id.action_sync:
+                SyncManager syncManager = new SyncManager(context);
+                syncManager.execute();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -53,9 +57,9 @@ public class PrincipalActivity extends AppCompatActivity {
     }
 
     private void prepareDatabase() {
-      //  DBHelper dbHelper = new DBHelper(this,"bitacora.db", 1);
-      //  SQLiteDatabase db = dbHelper.getWritableDatabase();
-      //  dbHelper.onCreate(db);
+      /*DBHelper dbHelper = new DBHelper(this,"bitacora.db", 1);
+      SQLiteDatabase db = dbHelper.getWritableDatabase();
+      dbHelper.onCreate(db);*/
 
     }
 

@@ -13,8 +13,11 @@ public class EntityOficina {
     private String region;
     private String oficina;
     private String segmento;
+    private int renovada;
+    private int cuenta_ci;
+    private String carrier;
 
-    public EntityOficina(int id, int cc, String direccion, String subdireccion, String region, String oficina, String segmento) {
+    public EntityOficina(int id, int cc, String direccion, String subdireccion, String region, String oficina, String segmento, int renovada, int cuenta_ci, String carrier) {
         this.id = id;
         this.cc = cc;
         this.direccion = direccion;
@@ -22,6 +25,9 @@ public class EntityOficina {
         this.region = region;
         this.oficina = oficina;
         this.segmento = segmento;
+        this.renovada = renovada;
+        this.cuenta_ci = cuenta_ci;
+        this.carrier = carrier;
     }
 
     public int getId() {
@@ -80,7 +86,27 @@ public class EntityOficina {
         this.segmento = segmento;
     }
 
+    public int getRenovada() {
+        return renovada;
+    }
 
+    public void setRenovada(int renovada) {
+        this.renovada = renovada;
+    }
 
+    public int getCuenta_ci() {
+        return cuenta_ci;
+    }
 
+    public void setCuenta_ci(int cuenta_ci) {
+        this.cuenta_ci = cuenta_ci;
+    }
+
+    public String getCarrier() {
+        return carrier;
+    }
+
+    public void setCarrier(String carrier) {
+        this.carrier = carrier;
+    }
 }

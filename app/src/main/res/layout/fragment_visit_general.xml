@@ -2,25 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
     tools:context="com.example.jurizo.bitacora.VisitGeneralFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_below="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CheckBox" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Oficina:"/>
+    <AutoCompleteTextView
+        android:id="@+id/visit_general_oficinas"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
-
+        android:layout_marginLeft="50dp"/>
 </RelativeLayout>
