@@ -43,16 +43,15 @@ public class SyncAuxHandlerParse {
         try {
             JSONObject jsonObj = new JSONObject(jsonStrOficinas);
 
-            JSONArray oficinasArray = jsonObj.getJSONArray("oficinas");
+            JSONArray oficinasArray = jsonObj.getJSONArray("data");
 
             oficinas = new ArrayList<>();
 
             for (int i = 0; i < oficinasArray.length(); i++) {
 
-                JSONObject oficinaObject = oficinasArray.getJSONObject(i);
-
-                JSONObject osObj = oficinaObject.getJSONObject("oficina");
-
+                //JSONObject oficinaObject = oficinasArray.getJSONObject(i);
+                //JSONObject osObj = oficinaObject.getJSONObject("oficina");
+                JSONObject osObj = oficinasArray.getJSONObject(i);
                 Integer id = osObj.getInt("id");
                 Integer cc = osObj.getInt("cc");
                 String direccion = osObj.getString("direccion").trim();
@@ -60,8 +59,11 @@ public class SyncAuxHandlerParse {
                 String region = osObj.getString("region").trim();
                 String os = osObj.getString("oficina").trim();
                 String segmento = osObj.getString("segmento").trim();
+                int renovada = osObj.getInt("renovada");
+                int cuenta_ci = osObj.getInt("cuenta_ci");
+                String carrier = osObj.getString("carrier").trim();
 
-                EntityOficina oficina = new EntityOficina(id, cc, direccion, subdireccion, region, os, segmento);
+                EntityOficina oficina = new EntityOficina(id, cc, direccion, subdireccion, region, os, segmento, renovada, cuenta_ci, carrier);
 
                 oficinas.add(oficina);
 

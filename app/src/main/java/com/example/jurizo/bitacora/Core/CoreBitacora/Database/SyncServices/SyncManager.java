@@ -59,7 +59,8 @@ public class SyncManager extends AsyncTask<Void, String, Void> {
                 try{
                     List<EntityOficina> listOficinas = null;
                     publishProgress("Conectando para obtener oficinas...");
-                    String jsonStrOficinas = httpHandler.makeServicesCall(hostname + ":" + port + "/" + pathSyncFiles + "/oficinas_get_all.php");
+                    String strUrl = hostname + port + pathSyncFiles + "getOficinas.php";
+                    String jsonStrOficinas = httpHandler.makeServicesCall(strUrl);
                     if (jsonStrOficinas != null) {
                         listOficinas = SyncAuxHandlerParse.OficinasJSONParse(jsonStrOficinas);
                         if(listOficinas != null && listOficinas.size() > 0){
