@@ -22,9 +22,9 @@ public class SyncManager extends AsyncTask<Void, String, Void> {
     private Context context;
     private ProgressDialog progressDialog;
 
-    private static String hostname = "http://192.168.100.20";
+    private static String hostname = "http://cblymbitacora.esy.es"; //"http://192.168.100.20/BitacoraWS";
     private static String port = "";
-    private static String pathSyncFiles = "/BitacoraWS/Core/";
+    private static String pathSyncFiles = "/core/";
     private DBHelper dbHelper;
 
     public SyncManager(Context context){
