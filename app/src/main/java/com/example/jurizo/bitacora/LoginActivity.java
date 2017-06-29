@@ -2,6 +2,7 @@ package com.example.jurizo.bitacora;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DBHelper;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -29,13 +32,21 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         
         ButterKnife.inject(this);
-        
+
+        PrepareDataBase();
+
         login_user_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signup();
             }
         });
+    }
+
+    private void PrepareDataBase() {
+      DBHelper dbHelper = new DBHelper(this);
+      //SQLiteDatabase db = dbHelper.getWritableDatabase();
+      //dbHelper.onCreate(db);
     }
 
     private void signup() {
@@ -59,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                         onSignUpSuccess();
                         progressDialog.dismiss();
                     }
-                }, 4000);
+                }, 2000);
 
     }
 

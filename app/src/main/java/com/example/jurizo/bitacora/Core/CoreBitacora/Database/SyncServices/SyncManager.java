@@ -3,8 +3,12 @@ package com.example.jurizo.bitacora.Core.CoreBitacora.Database.SyncServices;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Oficinas;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DBHelper;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityOficina;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.SysDbVersionEntity;
@@ -34,47 +38,69 @@ public class SyncManager extends AsyncTask<Void, String, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        HttpHandler httpHandler = new HttpHandler();
-        SysDbVersionEntity dbVersionEntityData = null;
-        dbHelper = new DBHelper(context);
-        try{
-            publishProgress("Buscando actualización de información");
-            String strUrl = hostname + port + pathSyncFiles + "getVersionDataBase.php";
-            String jsonStrVersionDB = httpHandler.makeServicesCall(strUrl);
+        progressDialog.setCancelable(true);
+        if(validateInternetConnection()) {
 
-            if(jsonStrVersionDB != null){
-                dbVersionEntityData = SyncAuxHandlerParse.DBVersionParse(jsonStrVersionDB);
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                if(db.getVersion() < dbVersionEntityData.getId()){
+            HttpHandler httpHandler = new HttpHandler();
+            SysDbVersionEntity dbVersionEntityData = null;
+            //dbHelper = new DBHelper(context);
+            DAO_Oficinas daoOficinas = new DAO_Oficinas(context);
+            try {
+                publishProgress("Buscando actualización de información");
+                String strUrl = hostname + port + pathSyncFiles + "getVersionDataBase.php";
+                String jsonStrVersionDB = httpHandler.makeServicesCall(strUrl);
 
-                }
-            }
-        }catch (ProtocolException ex){
-            ex.printStackTrace();
-        }
+                if (jsonStrVersionDB != null) {
+                    dbVersionEntityData = SyncAuxHandlerParse.DBVersionParse(jsonStrVersionDB);
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    if (db.getVersion() < dbVersionEntityData.getId()) {
 
-        if(dbVersionEntityData != null){
-            publishProgress("Preparando la base de datos.......");
-            if(dbVersionEntityData.getupdateOficinas() == 1){
-                try{
-                    List<EntityOficina> listOficinas = null;
-                    publishProgress("Conectando para obtener oficinas...");
-                    String strUrl = hostname + port + pathSyncFiles + "getOficinas.php";
-                    String jsonStrOficinas = httpHandler.makeServicesCall(strUrl);
-                    if (jsonStrOficinas != null) {
-                        listOficinas = SyncAuxHandlerParse.OficinasJSONParse(jsonStrOficinas);
-                        if(listOficinas != null && listOficinas.size() > 0){
-                            publishProgress("Actualizando estructura de oficinas....");
-                            dbHelper.updateOficinas(listOficinas);
-                            publishProgress("Se actualizo la estructura de oficinas....");
-                        }
                     }
-                }catch (ProtocolException ex){
-                    ex.printStackTrace();
+                }
+            } catch (ProtocolException ex) {
+                ex.printStackTrace();
+            }
+
+            if (dbVersionEntityData != null) {
+                publishProgress("Preparando la base de datos.......");
+                if (dbVersionEntityData.getupdateOficinas() == 1) {
+                    try {
+                        List<EntityOficina> listOficinas = null;
+                        publishProgress("Conectando para obtener oficinas...");
+                        String strUrl = hostname + port + pathSyncFiles + "getOficinas.php";
+                        String jsonStrOficinas = httpHandler.makeServicesCall(strUrl);
+                        if (jsonStrOficinas != null) {
+                            listOficinas = SyncAuxHandlerParse.OficinasJSONParse(jsonStrOficinas);
+                            if (listOficinas != null && listOficinas.size() > 0) {
+                                publishProgress("Actualizando estructura de oficinas....");
+                                daoOficinas.updateOficinas(listOficinas);
+                                publishProgress("Se actualizo la estructura de oficinas....");
+                            }
+                        }
+                    } catch (ProtocolException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
+        }else{
+
+
         }
         return null;
+    }
+
+    private boolean validateInternetConnection() {
+        publishProgress("Validando conexión...");
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        }
+        else
+            connected = false;
+        return  connected;
     }
 
     @Override
@@ -101,6 +127,7 @@ public class SyncManager extends AsyncTask<Void, String, Void> {
     @Override
     protected void onCancelled() {
         super.onCancelled();
+
     }
 
     @Override

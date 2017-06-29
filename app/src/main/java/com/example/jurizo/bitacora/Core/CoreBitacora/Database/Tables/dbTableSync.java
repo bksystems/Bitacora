@@ -1,4 +1,4 @@
-package com.example.jurizo.bitacora.Core.CoreBitacora.Database;
+package com.example.jurizo.bitacora.Core.CoreBitacora.Database.Tables;
 
 /**
  * Created by Carlos Rizo on 25/06/2017.

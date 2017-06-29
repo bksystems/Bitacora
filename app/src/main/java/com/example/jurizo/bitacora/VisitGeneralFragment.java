@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Oficinas;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DBHelper;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityOficina;
 
@@ -43,8 +44,8 @@ public class VisitGeneralFragment extends Fragment {
         AutoCompleteTextView autoCompleteTextViewOficinas;
         autoCompleteTextViewOficinas = (AutoCompleteTextView) rootView.findViewById(R.id.visit_general_oficinas);
 
-        DBHelper dbHelper = new DBHelper(getContext());
-        List<EntityOficina> oficinas = dbHelper.getAllOficinas();
+        DAO_Oficinas daoOficinas = new DAO_Oficinas(getContext());
+        List<EntityOficina> oficinas = daoOficinas.getOficinas();
         String[] oficinasArray = new String[oficinas.size()];
         for (int i =0; i < oficinas.size(); i++){
             oficinasArray[i] = oficinas.get(i).getOficina();
