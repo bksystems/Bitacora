@@ -9,7 +9,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Visits;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.SyncServices.SyncManager;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityVisita;
+
+import java.util.List;
 
 public class PrincipalActivity extends AppCompatActivity {
 
@@ -20,7 +24,7 @@ public class PrincipalActivity extends AppCompatActivity {
         context = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-        prepareDatabase();
+        loadVisitas();
         setToolbar();
     }
 
@@ -56,10 +60,9 @@ public class PrincipalActivity extends AppCompatActivity {
 
     }
 
-    private void prepareDatabase() {
-      /*DBHelper dbHelper = new DBHelper(this,"bitacora.db", 1);
-      SQLiteDatabase db = dbHelper.getWritableDatabase();
-      dbHelper.onCreate(db);*/
+    private void loadVisitas() {
+        DAO_Visits dao_visits = new DAO_Visits(context);
+        List<EntityVisita> visitas = dao_visits.getVisitas();
 
     }
 

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="70dip"
+    android:layout_margin="1dp"
+    android:padding="6dip" >
+
+    <ImageView
+        android:id="@+id/layout_visita_imagen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/layout_visita_usuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:padding="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/layout_visita_imagen"
+        android:layout_toRightOf="@+id/layout_visita_imagen"
+        android:text="Usuario que ejecuto visita" />
+
+    <TextView
+        android:id="@+id/layout_visita_fecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="Fecha" />
+
+    <TextView
+        android:id="@+id/layout_visita_oficina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textStyle="bold"
+        android:textSize="12dp"
+        android:layout_alignBottom="@+id/layout_visita_imagen"
+        android:layout_toEndOf="@+id/layout_visita_imagen"
+        android:layout_toRightOf="@+id/layout_visita_imagen"
+        android:text="Oficina" />
+
+    <ImageView
+        android:id="@+id/layout_visita_imagen_status"
+        android:layout_width="wrap_content"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        app:srcCompat="@drawable/ic_home_black_24dp" />
+</RelativeLayout>

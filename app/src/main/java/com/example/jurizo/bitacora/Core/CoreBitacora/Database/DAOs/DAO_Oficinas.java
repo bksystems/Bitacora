@@ -84,4 +84,30 @@ public class DAO_Oficinas {
         return true;
     }
 
+    public EntityOficina getOficinaById(int idSearch) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        EntityOficina oficinaObject = null;
+        try{
+            String query = "select * from Oficinas where id = " + idSearch;
+            Cursor cursor = db.rawQuery(query, null);
+            while (cursor.moveToFirst()){
+                int id = Integer.parseInt(cursor.getString(0));
+                int cc = Integer.parseInt(cursor.getString(1));
+                String direccion =cursor.getString(2);
+                String subdireccion = cursor.getString(3);
+                String region = cursor.getString(4);
+                String oficina = cursor.getString(5);
+                String segmento = cursor.getString(6);
+                int renovada =  Integer.parseInt(cursor.getString(7));
+                int cuenta_ci =  Integer.parseInt(cursor.getString(8));
+                String carrier = cursor.getString(9);
+                oficinaObject = new EntityOficina(id, cc, direccion, subdireccion, region, oficina, segmento, renovada, cuenta_ci, carrier);
+            }
+        }catch (Exception ex){
+            Log.d("DB_Oficina", ex.getMessage());
+        }
+        return  oficinaObject;
+    }
+
+
 }

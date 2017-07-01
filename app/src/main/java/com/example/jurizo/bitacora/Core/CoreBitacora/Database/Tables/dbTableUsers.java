@@ -11,7 +11,7 @@ public class dbTableUsers {
     private static String UserNomina = "nomina integer, ";
     private static String UserApellidoPaterno = "apellido_paterno text not null, ";
     private static String UserApellidoMaterno= "apellido_materno text not null, ";
-    private static String UserNombtres = "nombres text not null, ";
+    private static String UserNombres = "nombres text not null, ";
     private static String UserEmail = "email text not null, ";
     private static String UserPassword = "password text not null, ";
     private static String UserStatus = "status integer null, ";
@@ -24,7 +24,7 @@ public class dbTableUsers {
             + UserNomina
             + UserApellidoPaterno
             + UserApellidoMaterno
-            + UserNombtres
+            + UserNombres
             + UserEmail
             + UserPassword
             + UserStatus
@@ -33,5 +33,5 @@ public class dbTableUsers {
             + UserTokenFinish
             + ");";
 
-    public static String OnDelete = "Drop Table " + TableName + ";";
+    public static String OnDelete = "DROP TABLE IF EXISTS " + TableName + ";";
 }

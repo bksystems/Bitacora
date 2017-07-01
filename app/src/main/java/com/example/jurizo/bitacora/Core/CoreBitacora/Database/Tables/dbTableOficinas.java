@@ -32,6 +32,6 @@ public class dbTableOficinas {
             + OficinaCarrier
             + ");";
 
-    public static String OnDelete = "Drop Table " + TableName + ";";
+    public static String OnDelete = "DROP TABLE IF EXISTS " + TableName + ";";
 
 }

@@ -3,6 +3,7 @@ package com.example.jurizo.bitacora;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,9 +45,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void PrepareDataBase() {
-      DBHelper dbHelper = new DBHelper(this);
-      //SQLiteDatabase db = dbHelper.getWritableDatabase();
-      //dbHelper.onCreate(db);
+        try {
+            //DBHelper dbHelper = new DBHelper(this);
+            //SQLiteDatabase db = dbHelper.getWritableDatabase();
+            //dbHelper.onCreate(db);
+
+        }catch (SQLiteException ex){
+            Log.i("DB", ex.getMessage());
+        }
     }
 
     private void signup() {
@@ -70,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                         onSignUpSuccess();
                         progressDialog.dismiss();
                     }
-                }, 2000);
+                }, 1000);
 
     }
 

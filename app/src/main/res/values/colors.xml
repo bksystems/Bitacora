@@ -2,5 +2,7 @@
 <resources>
     <color name="colorBase">#6bd9ec</color>
     <color name="nav_item_state_list">#FFFF</color>
+    <color name="colorBaseLineTwo">#edddbe</color>
+    <color name="colorBaseLineOne">#bcf1e4</color>
 
 </resources>

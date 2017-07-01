@@ -8,7 +8,7 @@ public class dbTableVisits {
     public static String TableName = "Visitas";
 
     private static String VisitId = "id INTEGER PRIMARY KEY AUTOINCREMENT, ";
-    private static String VisitFecha = "nomina text not null, ";
+    private static String VisitFecha = "fecha text not null, ";
     private static String VisitUserId = "user_id integer not null, ";
     private static String VisitOficinaId = "oficina_id integer not null, ";
     private static String VisitIsUpdate = "Isupdate integer not null, ";
@@ -24,5 +24,5 @@ public class dbTableVisits {
             + VisitStatus
             + ");";
 
-    public static String OnDelete = "Drop Table " + TableName + ";";
+    public static String OnDelete = "DROP TABLE IF EXISTS " + TableName + ";";
 }
