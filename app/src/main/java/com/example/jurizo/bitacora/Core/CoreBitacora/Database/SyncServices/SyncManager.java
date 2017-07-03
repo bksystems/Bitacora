@@ -26,9 +26,10 @@ public class SyncManager extends AsyncTask<Void, String, Void> {
     private Context context;
     private ProgressDialog progressDialog;
 
-    private static String hostname = "http://cblymbitacora.esy.es"; //"http://192.168.100.20/BitacoraWS";
-    private static String port = "";
-    private static String pathSyncFiles = "/core/";
+    private static String hostname = ConfigServerConnection.getHostname();
+    private static String port = ConfigServerConnection.getPort();
+    private static String pathSyncFiles = ConfigServerConnection.getPathSyncFiles();
+
     private DBHelper dbHelper;
 
     public SyncManager(Context context){
@@ -52,10 +53,10 @@ public class SyncManager extends AsyncTask<Void, String, Void> {
 
                 if (jsonStrVersionDB != null) {
                     dbVersionEntityData = SyncAuxHandlerParse.DBVersionParse(jsonStrVersionDB);
-                    SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    if (db.getVersion() < dbVersionEntityData.getId()) {
+                    //SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    //if (db.getVersion() < dbVersionEntityData.getId()) {
 
-                    }
+                    //}
                 }
             } catch (ProtocolException ex) {
                 ex.printStackTrace();

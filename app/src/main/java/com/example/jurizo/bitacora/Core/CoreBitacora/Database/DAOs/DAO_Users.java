@@ -1,11 +1,14 @@
 package com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DBHelper;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.Tables.dbTableOficinas;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.Tables.dbTableUsers;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityOficina;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityUser;
 
@@ -80,5 +83,37 @@ public class DAO_Users {
             Log.d("DB_Users", ex.getMessage());
         }
         return  user;
+    }
+
+    public boolean insertUsers(List<EntityUser> usersAsignated) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + dbTableUsers.TableName);
+        db.execSQL(dbTableUsers.OnCreate);
+
+        int idUser = 0;
+
+        if(db!=null){
+            for (EntityUser user : usersAsignated) {
+                ContentValues values = new ContentValues();
+                //values.put("id", user.getId());
+                values.put("nomina", user.getNomina());
+                values.put("apellido_paterno", user.getApellido_paterno());
+                values.put("apellido_materno", user.getApellido_materno());
+                values.put("nombres", user.getNombres());
+                values.put("email", user.getEmail());
+                values.put("password", user.getPassword());
+                values.put("status", user.getStatus());
+                values.put("id_jefe", user.getId_jefe());
+                values.put("token", user.getToken());
+                values.put("tokenFinish", user.getTokenFinish());
+
+                if(db.isOpen()) {
+                    idUser = (int) db.insert(dbTableUsers.TableName, null, values);
+                }
+            }
+
+        }
+
+        return true;
     }
 }

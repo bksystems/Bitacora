@@ -17,7 +17,7 @@ public class dbTableUsers {
     private static String UserStatus = "status integer null, ";
     private static String UserIdJefe = "id_jefe integer, ";
     private static String UserToken = "token text not null, ";
-    private static String UserTokenFinish = "tokeFinish text not null ";
+    private static String UserTokenFinish = "tokenFinish text not null ";
 
     public static String OnCreate = "Create Table " + TableName + "("
             + UserId

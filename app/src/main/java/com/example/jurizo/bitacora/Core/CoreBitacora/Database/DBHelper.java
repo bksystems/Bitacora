@@ -21,7 +21,7 @@ import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "bitacora.db";
 
     public DBHelper(Context context) {
@@ -73,10 +73,10 @@ public class DBHelper extends SQLiteOpenHelper {
         values3.put("status", 1);
         values3.put("id_jefe", 0);
         values3.put("token", "empty");
-        values3.put("toke_finish", "11/07/17");
+        values3.put("tokeFinish", "11/07/17");
         db.insert("Users", null, values);
 
-        db.close(); // Closing database connection
+        //db.close(); // Closing database connection
     }
 
     @Override

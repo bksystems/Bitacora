@@ -3,6 +3,7 @@ package com.example.jurizo.bitacora.Core.CoreBitacora.Database.SyncServices;
 import android.util.Log;
 
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityOficina;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityUser;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.SysDbVersionEntity;
 
 import org.json.JSONArray;
@@ -49,8 +50,6 @@ public class SyncAuxHandlerParse {
 
             for (int i = 0; i < oficinasArray.length(); i++) {
 
-                //JSONObject oficinaObject = oficinasArray.getJSONObject(i);
-                //JSONObject osObj = oficinaObject.getJSONObject("oficina");
                 JSONObject osObj = oficinasArray.getJSONObject(i);
                 Integer id = osObj.getInt("id");
                 Integer cc = osObj.getInt("cc");
@@ -72,5 +71,77 @@ public class SyncAuxHandlerParse {
             Log.e("ParseOficina", "Json parsing error: " + e.getMessage());
         }
         return oficinas;
+    }
+    
+
+    public static EntityUser UserLoginJsonParse(String strjsonLoginResult) {
+        EntityUser user = null;
+        try {
+            JSONObject jsonLoginResult = new JSONObject(strjsonLoginResult);
+
+            JSONArray jsonUserLogin = jsonLoginResult.getJSONArray("data");
+
+            if (jsonUserLogin.length() > 0) {
+                for (int i = 0; i < jsonUserLogin.length(); i++) {
+
+                    JSONObject osObj = jsonUserLogin.getJSONObject(i);
+                    Integer id = osObj.getInt("id");
+                    Integer nomina = osObj.getInt("nomina");
+                    String apellido_paterno = osObj.getString("apellido_paterno").trim();
+                    String apellido_materno = osObj.getString("apellido_materno").trim();
+                    String nombres = osObj.getString("nombres").trim();
+                    String email = osObj.getString("email").trim();
+                    String password = osObj.getString("password").trim();
+                    int status = osObj.getInt("status");
+                    int id_jefe = osObj.getInt("id_jefe");
+                    String token = osObj.getString("token").trim();
+                    String finishToken = osObj.getString("finishToken").trim();
+
+                    user = new EntityUser(id, nomina, apellido_paterno, apellido_materno, nombres, email, password, status, id_jefe, token, finishToken);
+                }
+            } else {
+                user = null;
+            }
+        } catch (final JSONException e) {
+            Log.e("ParseLogin", "Json parsing error: " + e.getMessage());
+        }
+        return user;
+    }
+
+    public static List<EntityUser> UserJSONParse(String strjsonuser) {
+        List<EntityUser> users = null;
+
+        try {
+            JSONObject jsonLoginResult = new JSONObject(strjsonuser);
+
+            JSONArray jsonUserLogin = jsonLoginResult.getJSONArray("data");
+
+            if (jsonUserLogin.length() > 0) {
+                users = new ArrayList<>();
+                for (int i = 0; i < jsonUserLogin.length(); i++) {
+
+                    JSONObject osObj = jsonUserLogin.getJSONObject(i);
+                    Integer id = osObj.getInt("id");
+                    Integer nomina = osObj.getInt("nomina");
+                    String apellido_paterno = osObj.getString("apellido_paterno").trim();
+                    String apellido_materno = osObj.getString("apellido_materno").trim();
+                    String nombres = osObj.getString("nombres").trim();
+                    String email = osObj.getString("email").trim();
+                    String password = osObj.getString("password").trim();
+                    int status = osObj.getInt("status");
+                    int id_jefe = osObj.getInt("id_jefe");
+                    String token = "";
+                    String finishToken = "";
+
+                    EntityUser user = new EntityUser(id, nomina, apellido_paterno, apellido_materno, nombres, email, password, status, id_jefe, token, finishToken);
+                    users.add(user);
+                }
+            } else {
+                users = null;
+            }
+        } catch (final JSONException e) {
+            Log.e("ParseUsers", "Json parsing error: " + e.getMessage());
+        }
+        return users;
     }
 }
