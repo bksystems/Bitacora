@@ -95,7 +95,7 @@ public class DAO_Users {
         if(db!=null){
             for (EntityUser user : usersAsignated) {
                 ContentValues values = new ContentValues();
-                //values.put("id", user.getId());
+                values.put("id", user.getId());
                 values.put("nomina", user.getNomina());
                 values.put("apellido_paterno", user.getApellido_paterno());
                 values.put("apellido_materno", user.getApellido_materno());
@@ -115,5 +115,32 @@ public class DAO_Users {
         }
 
         return true;
+    }
+
+    public EntityUser loginValidate(String username, String userpassword) {  SQLiteDatabase db = helper.getWritableDatabase();
+        EntityUser user = null;
+        try{
+            String query = "SELECT * FROM Users WHERE nomina = " + username + " and password = '" + userpassword + "' ORDER BY ROWID ASC LIMIT 1";
+            Cursor cursor = db.rawQuery(query, null);
+            while (cursor.moveToFirst()){
+                int id = Integer.parseInt(cursor.getString(0));
+                int nomina = Integer.parseInt(cursor.getString(1));
+                String apellido_paterno = cursor.getString(2);
+                String apellido_materno = cursor.getString(3);
+                String nombres = cursor.getString(4);
+                String email = cursor.getString(5);
+                String password = cursor.getString(6);
+                int status = Integer.parseInt(cursor.getString(7));
+                int id_jefe = Integer.parseInt(cursor.getString(8));
+                String token = cursor.getString(9);
+                String tokenFinish = cursor.getString(10);
+                user = new EntityUser(id, nomina, apellido_paterno, apellido_materno, nombres, email, password, status, id_jefe, token, tokenFinish);
+                break;
+            }
+        }catch (Exception ex){
+            Log.d("DB_Users", ex.getMessage());
+        }
+        return  user;
+
     }
 }

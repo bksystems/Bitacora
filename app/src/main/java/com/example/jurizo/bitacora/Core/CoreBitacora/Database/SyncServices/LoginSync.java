@@ -25,13 +25,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Carlos Rizo on 26/06/2017.
  */
 
-public class LoginSyncFaild extends AsyncTask<String, String, EntityUser>{
+public class LoginSync extends AsyncTask<String, String, EntityUser>{
 
     private String TAG = SyncManager.class.getSimpleName();
     private Context context;
@@ -44,7 +46,7 @@ public class LoginSyncFaild extends AsyncTask<String, String, EntityUser>{
     private DBHelper dbHelper;
     private AlertDialog alertDialog;
 
-    public LoginSyncFaild(Context context){
+    public LoginSync(Context context){
         this.context = context;
     }
 
@@ -61,7 +63,7 @@ public class LoginSyncFaild extends AsyncTask<String, String, EntityUser>{
 
             EntityUser user = LoginValidate(strUrlLogin, username, userpassword, deviceSerie, devicesImei);
 
-            if(user != null){
+            if(user != null && user.getStatus() > 0){
                 HttpHandler httpHandler = new HttpHandler();
                 publishProgress("Obteniendo usuarios");
                 List<EntityUser> usersAsignated = getUserAsignated(user);
@@ -131,6 +133,45 @@ public class LoginSyncFaild extends AsyncTask<String, String, EntityUser>{
 
     private EntityUser LoginValidate(String strUrl, String username, String userpassword, String deviceSerie, String devicesImei) {
         EntityUser user = null;
+        user = validateInDataBase(username, userpassword);
+        if(user == null || user.getStatus() == 0 || tokenIsValid(user) == false){
+            user = validateInServer(strUrl, username, userpassword, deviceSerie, devicesImei);
+        }
+        return  user;
+    }
+
+    private boolean tokenIsValid(EntityUser user) {
+        boolean result = false;
+        try {
+            String token = user.getToken();
+            String tokenFinish = user.getTokenFinish();
+            Calendar calander = Calendar.getInstance();
+            int cDay = calander.get(Calendar.DAY_OF_MONTH);
+            int cMonth = calander.get(Calendar.MONTH) + 1;
+            int cYear = calander.get(Calendar.YEAR);
+            Date dateNow = new Date(cYear, cMonth, cDay);
+            int tDay = Integer.parseInt(tokenFinish.split("-")[2]);
+            int tMont = Integer.parseInt(tokenFinish.split("-")[1]);
+            int tYear = Integer.parseInt(tokenFinish.split("-")[0]);
+            Date dateFinish = new Date(tYear, tMont, tDay);
+            if (dateFinish.after(dateNow)) {
+                result = true;
+            }
+        }catch (Exception ex){
+            result = false;
+        }
+        return result;
+    }
+
+    private EntityUser validateInDataBase(String username, String userpassword) {
+        EntityUser user = null;
+        DAO_Users dao_users = new DAO_Users(context);
+        user = dao_users.loginValidate(username, userpassword);
+        return user;
+    }
+
+    private EntityUser validateInServer(String strUrl, String username, String userpassword, String deviceSerie, String devicesImei) {
+        EntityUser user = null;
         try {
             URL url = new URL(strUrl);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -164,7 +205,7 @@ public class LoginSyncFaild extends AsyncTask<String, String, EntityUser>{
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return  user;
+        return user;
     }
 
     @Override

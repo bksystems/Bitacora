@@ -24,7 +24,6 @@ public class PrincipalActivity extends AppCompatActivity {
         context = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-        loadVisitas();
         setToolbar();
     }
 
@@ -60,11 +59,6 @@ public class PrincipalActivity extends AppCompatActivity {
 
     }
 
-    private void loadVisitas() {
-        DAO_Visits dao_visits = new DAO_Visits(context);
-        List<EntityVisita> visitas = dao_visits.getVisitas();
-
-    }
 
 
 }
