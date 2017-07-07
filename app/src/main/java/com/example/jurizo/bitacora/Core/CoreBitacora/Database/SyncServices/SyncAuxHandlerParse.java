@@ -2,8 +2,10 @@ package com.example.jurizo.bitacora.Core.CoreBitacora.Database.SyncServices;
 
 import android.util.Log;
 
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Users;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityOficina;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityUser;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityVisita;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.SysDbVersionEntity;
 
 import org.json.JSONArray;
@@ -72,7 +74,6 @@ public class SyncAuxHandlerParse {
         }
         return oficinas;
     }
-    
 
     public static EntityUser UserLoginJsonParse(String strjsonLoginResult) {
         EntityUser user = null;
@@ -143,5 +144,39 @@ public class SyncAuxHandlerParse {
             Log.e("ParseUsers", "Json parsing error: " + e.getMessage());
         }
         return users;
+    }
+
+    public static List<EntityVisita> VisitasJSONParse(String strjson) {
+        List<EntityVisita> visitas = null;
+
+        try {
+            JSONObject jsonLoginResult = new JSONObject(strjson);
+
+            JSONArray jsonUserLogin = jsonLoginResult.getJSONArray("data");
+
+            if (jsonUserLogin.length() > 0) {
+                visitas = new ArrayList<>();
+                for (int i = 0; i < jsonUserLogin.length(); i++) {
+
+                    JSONObject osObj = jsonUserLogin.getJSONObject(i);
+                    Integer id = osObj.getInt("id");
+                    String fehca = osObj.getString("fecha").trim();
+                    Integer user_id = osObj.getInt("user_id");
+                    Integer oficina_id = osObj.getInt("oficina_id");
+                    Integer isupdate = osObj.getInt("isupdate");
+                    Integer status = osObj.getInt("status");
+
+                    EntityUser usr = new EntityUser(user_id, 0, "", "", "", "", "", 0, 0, "", "");
+                    EntityOficina os = new EntityOficina(oficina_id, 0, "", "", "", "", "", 0,0,"");
+                    EntityVisita visita = new EntityVisita(id, fehca, usr, os, isupdate, status);
+                    visitas.add(visita);
+                }
+            } else {
+                visitas = null;
+            }
+        } catch (final JSONException e) {
+            Log.e("ParseVisita", "Json parsing error: " + e.getMessage());
+        }
+        return visitas;
     }
 }

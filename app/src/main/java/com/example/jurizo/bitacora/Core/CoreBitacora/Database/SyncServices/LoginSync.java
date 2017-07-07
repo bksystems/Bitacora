@@ -11,6 +11,7 @@ import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Users;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DBHelper;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityOficina;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityUser;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityVisita;
 import com.example.jurizo.bitacora.LoginActivity;
 import com.example.jurizo.bitacora.PrincipalActivity;
 
@@ -25,6 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -67,6 +69,9 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
                 HttpHandler httpHandler = new HttpHandler();
                 publishProgress("Obteniendo usuarios");
                 List<EntityUser> usersAsignated = getUserAsignated(user);
+                if(usersAsignated == null){
+                    usersAsignated = new ArrayList<>();
+                }
                 usersAsignated.add(user);
                 DAO_Users dao_users = new DAO_Users(context);
                 if(dao_users.insertUsers(usersAsignated)){
@@ -83,6 +88,11 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
                             daoOficinas.updateOficinas(listOficinas);
                             publishProgress("Se actualizo la estructura de oficinas....");
                         }
+                        publishProgress("Obteniendo visitas....");
+                        String strUrlVisitas = hostname + port + pathSyncFiles + "getVisitas.php";
+                        List<EntityVisita> visitas = getVisitasServer(strUrlVisitas, usersAsignated);
+                        publishProgress("Procesando visitas....");
+                        //Insertar datos y completar objetos.
                     }
                 }
             }
@@ -91,6 +101,52 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
             ex.printStackTrace();
         }
         return null;
+    }
+
+    private List<EntityVisita> getVisitasServer(String strUrlVisitas, List<EntityUser> usersAsignated) {
+        List<EntityVisita> visitas = null;
+        String user_query = "";
+        int contador = 0;
+        for (EntityUser usr: usersAsignated) {
+            user_query += " user_id = " + usr.getId();
+            if(contador > 0 && contador < usersAsignated.size()){
+                user_query += " or ";
+            }
+        }
+
+        String strUrl = strUrlVisitas;
+
+        try {
+            URL url = new URL(strUrl);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
+            OutputStream outputStream = httpURLConnection.getOutputStream();
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+            String post_data = URLEncoder.encode("users_id", "UTF-8") + "=" + URLEncoder.encode(user_query, "UTF-8");
+            bufferedWriter.write(post_data);
+            bufferedWriter.flush();
+            bufferedWriter.close();
+            outputStream.close();
+            InputStream inputStream = httpURLConnection.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+            String result = "";
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                result += line;
+            }
+            bufferedReader.close();
+            inputStream.close();
+
+            visitas = SyncAuxHandlerParse.VisitasJSONParse(result);
+
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return  visitas;
     }
 
     private List<EntityUser> getUserAsignated(EntityUser user) {
