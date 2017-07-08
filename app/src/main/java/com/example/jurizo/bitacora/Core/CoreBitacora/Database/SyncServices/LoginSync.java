@@ -8,12 +8,14 @@ import android.os.AsyncTask;
 
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Oficinas;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Users;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Visits;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DBHelper;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityOficina;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityUser;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityVisita;
 import com.example.jurizo.bitacora.LoginActivity;
 import com.example.jurizo.bitacora.PrincipalActivity;
+import com.example.jurizo.bitacora.R;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -91,8 +93,12 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
                         publishProgress("Obteniendo visitas....");
                         String strUrlVisitas = hostname + port + pathSyncFiles + "getVisitas.php";
                         List<EntityVisita> visitas = getVisitasServer(strUrlVisitas, usersAsignated);
-                        publishProgress("Procesando visitas....");
-                        //Insertar datos y completar objetos.
+                        if(visitas != null && visitas.size() > 0) {
+                            publishProgress("Procesando visitas....");
+                            DAO_Visits dao_visits = new DAO_Visits(context);
+                            dao_visits.insertVisitas(visitas);
+                            publishProgress("visitas actualizadas correctamente....");
+                        }
                     }
                 }
             }
@@ -109,9 +115,10 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
         int contador = 0;
         for (EntityUser usr: usersAsignated) {
             user_query += " user_id = " + usr.getId();
-            if(contador > 0 && contador < usersAsignated.size()){
+            if(usersAsignated.size() > 1 && contador < usersAsignated.size() - 1){
                 user_query += " or ";
             }
+            contador++;
         }
 
         String strUrl = strUrlVisitas;
@@ -268,6 +275,7 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
     protected void onPreExecute() {
         alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle("Login Status");
+
 
         progressDialog = new ProgressDialog(context);
         progressDialog.setTitle("Inicio de sesión");

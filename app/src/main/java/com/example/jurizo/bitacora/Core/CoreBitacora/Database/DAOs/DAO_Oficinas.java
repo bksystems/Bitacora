@@ -23,35 +23,35 @@ public class DAO_Oficinas {
     private DBHelper helper;
 
 
-    public DAO_Oficinas(Context context){
+    public DAO_Oficinas(Context context) {
         this.context = context;
         helper = new DBHelper(context);
     }
 
-    public List<EntityOficina> getOficinas(){
+    public List<EntityOficina> getOficinas() {
         SQLiteDatabase db = helper.getWritableDatabase();
         List<EntityOficina> oficinas = new ArrayList<>();
-        try{
+        try {
             String query = "select * from Oficinas";
             Cursor cursor = db.rawQuery(query, null);
-            while (cursor.moveToNext()){
+            while (cursor.moveToNext()) {
                 int id = Integer.parseInt(cursor.getString(0));
                 int cc = Integer.parseInt(cursor.getString(1));
-                String direccion =cursor.getString(2);
+                String direccion = cursor.getString(2);
                 String subdireccion = cursor.getString(3);
                 String region = cursor.getString(4);
                 String oficina = cursor.getString(5);
                 String segmento = cursor.getString(6);
-                int renovada =  Integer.parseInt(cursor.getString(7));
-                int cuenta_ci =  Integer.parseInt(cursor.getString(8));
+                int renovada = Integer.parseInt(cursor.getString(7));
+                int cuenta_ci = Integer.parseInt(cursor.getString(8));
                 String carrier = cursor.getString(9);
                 EntityOficina ofi = new EntityOficina(id, cc, direccion, subdireccion, region, oficina, segmento, renovada, cuenta_ci, carrier);
                 oficinas.add(ofi);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.d("DB_Oficina", ex.getMessage());
         }
-        return  oficinas;
+        return oficinas;
     }
 
     public boolean updateOficinas(List<EntityOficina> listOficinas) {
@@ -61,7 +61,7 @@ public class DAO_Oficinas {
 
         int idOficina = 0;
 
-        if(db!=null){
+        if (db != null) {
             for (EntityOficina os : listOficinas) {
                 ContentValues values = new ContentValues();
                 values.put("cc", os.getCc());
@@ -74,7 +74,7 @@ public class DAO_Oficinas {
                 values.put("cuenta_ci", os.getCuenta_ci());
                 values.put("carrier", os.getCarrier());
 
-                if(db.isOpen()) {
+                if (db.isOpen()) {
                     idOficina = (int) db.insert(dbTableOficinas.TableName, null, values);
                 }
             }
@@ -87,26 +87,28 @@ public class DAO_Oficinas {
     public EntityOficina getOficinaById(int idSearch) {
         SQLiteDatabase db = helper.getWritableDatabase();
         EntityOficina oficinaObject = null;
-        try{
+        try {
             String query = "select * from Oficinas where id = " + idSearch;
             Cursor cursor = db.rawQuery(query, null);
-            while (cursor.moveToFirst()){
+            if (cursor != null) {
+                cursor.moveToFirst();
                 int id = Integer.parseInt(cursor.getString(0));
                 int cc = Integer.parseInt(cursor.getString(1));
-                String direccion =cursor.getString(2);
+                String direccion = cursor.getString(2);
                 String subdireccion = cursor.getString(3);
                 String region = cursor.getString(4);
                 String oficina = cursor.getString(5);
                 String segmento = cursor.getString(6);
-                int renovada =  Integer.parseInt(cursor.getString(7));
-                int cuenta_ci =  Integer.parseInt(cursor.getString(8));
+                int renovada = Integer.parseInt(cursor.getString(7));
+                int cuenta_ci = Integer.parseInt(cursor.getString(8));
                 String carrier = cursor.getString(9);
                 oficinaObject = new EntityOficina(id, cc, direccion, subdireccion, region, oficina, segmento, renovada, cuenta_ci, carrier);
+
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.d("DB_Oficina", ex.getMessage());
         }
-        return  oficinaObject;
+        return oficinaObject;
     }
 
 

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DBHelper;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.Tables.dbTableOficinas;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.Tables.dbTableVisits;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityOficina;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityUser;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityVisita;
@@ -39,12 +40,13 @@ public class DAO_Visits {
             DAO_Users dao_users = new DAO_Users(context);
 
             String query = "select * from Visitas";
+
             Cursor cursor = db.rawQuery(query, null);
             while (cursor.moveToNext()){
                 int id = Integer.parseInt(cursor.getString(0));
                 String fecha = cursor.getString(1);
-                EntityOficina oficina = dao_oficinas.getOficinaById(Integer.parseInt(cursor.getString(2)));
-                EntityUser user = dao_users.getUserById(Integer.parseInt(cursor.getString(3)));
+                EntityUser user = dao_users.getUserById(Integer.parseInt(cursor.getString(2)));
+                EntityOficina oficina = dao_oficinas.getOficinaById(Integer.parseInt(cursor.getString(3)));
                 int isupdate = Integer.parseInt(cursor.getString(4));
                 int status = Integer.parseInt(cursor.getString(5));
                 EntityVisita vst = new EntityVisita(id, fecha, user, oficina, isupdate, status);
@@ -56,4 +58,59 @@ public class DAO_Visits {
         return  visitas;
     }
 
+    public List<EntityVisita> getVisitasByUserId(int idUser){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        List<EntityVisita> visitas = new ArrayList<>();
+        try{
+
+            DAO_Oficinas dao_oficinas = new DAO_Oficinas(context);
+            DAO_Users dao_users = new DAO_Users(context);
+
+            String query = "select * from Visitas where user_id = " +  idUser;
+
+            Cursor cursor = db.rawQuery(query, null);
+            while (cursor.moveToNext()){
+                int id = Integer.parseInt(cursor.getString(0));
+                String fecha = cursor.getString(1);
+                EntityUser user = dao_users.getUserById(Integer.parseInt(cursor.getString(2)));
+                EntityOficina oficina = dao_oficinas.getOficinaById(Integer.parseInt(cursor.getString(3)));
+                int isupdate = Integer.parseInt(cursor.getString(4));
+                int status = Integer.parseInt(cursor.getString(5));
+                EntityVisita vst = new EntityVisita(id, fecha, user, oficina, isupdate, status);
+                visitas.add(vst);
+            }
+        }catch (Exception ex){
+            Log.d("DB_Visitas", ex.getMessage());
+        }
+        return  visitas;
+    }
+
+    public boolean insertVisitas(List<EntityVisita> visitas) {
+        boolean result = false;
+        SQLiteDatabase db = helper.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + dbTableVisits.TableName);
+        db.execSQL(dbTableVisits.OnCreate);
+        int contador = 0, idVisita = 0;
+
+        if(db!=null){
+            for (EntityVisita vst : visitas) {
+                ContentValues values = new ContentValues();
+                values.put("id", vst.getId());
+                values.put("fecha", vst.getFecha());
+                values.put("user_id", vst.getUser().getId());
+                values.put("oficina_id", vst.getOficina().getId());
+                values.put("Isupdate", vst.getIsUpdate());
+                values.put("status", vst.getStatus());
+                if(db.isOpen()) {
+                    idVisita = (int) db.insert(dbTableVisits.TableName, null, values);
+                    contador++;
+                }
+            }
+            if(contador == visitas.size()){
+                result = true;
+            }
+        }
+
+        return true;
+    }
 }

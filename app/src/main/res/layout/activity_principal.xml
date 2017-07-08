@@ -11,50 +11,56 @@
     <ScrollView
         android:layout_below="@id/main_action_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="5dp"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp">
+            android:paddingRight="5dp"
+            android:paddingTop="5dp">
 
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="#b3b3b3"
+                android:layout_marginBottom="2dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp">
+                android:textColorHint="#b3b3b3">
+
                 <TextView
                     android:id="@+id/visit_textview_selecionar_colaborador"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:hint="Filtrar por colaborador"/>
+                    android:hint="Filtrar por colaborador"
+                    android:inputType="number" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="#b3b3b3"
+                android:layout_marginBottom="2dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp">
-            <Spinner
-                android:id="@+id/login_user_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="Numero de nómina"/>
+                android:textColorHint="#b3b3b3">
+
+                <Spinner
+                    android:id="@+id/principal_spinner_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dialog"
+                    android:layout_centerHorizontal="true"
+                    style="spinnerStyle"
+                    android:layout_centerVertical="true"/>
+
             </android.support.design.widget.TextInputLayout>
 
             <ListView
-                android:layout_marginTop="5dp"
-                android:background="@color/colorBase"
+                android:id="@+id/visit_lst_visitas"
                 android:layout_width="match_parent"
-                android:layout_height="100dp">
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
             </ListView>
 

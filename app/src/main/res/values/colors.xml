@@ -4,5 +4,11 @@
     <color name="nav_item_state_list">#FFFF</color>
     <color name="colorBaseLineTwo">#edddbe</color>
     <color name="colorBaseLineOne">#bcf1e4</color>
-
+    <color name="progress_bg">#f9e400</color>
+    <color name="progress_text">#000000</color>
+    <color name="white_overlay_8x">#FFFF</color>
+    <color name="white">#000000</color>
+    <color name="listview_visita_nombre">#000554</color>
+    <color name="listview_visita_fecha">#7c7c7c</color>
+    <color name="listview_visita_oficina">#404040</color>
 </resources>

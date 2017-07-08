@@ -7,4 +7,12 @@
 
     </style>
 
+    <style name="spinnerStyle" parent="@android:style/Widget.Spinner">
+        <item name="android:divider">@color/colorBase</item>
+        <item name="android:padding">1dp</item>
+        <item name="android:selectableItemBackground">@color/colorBaseLineTwo</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:layout_margin">1dp</item>
+    </style>
+
 </resources>

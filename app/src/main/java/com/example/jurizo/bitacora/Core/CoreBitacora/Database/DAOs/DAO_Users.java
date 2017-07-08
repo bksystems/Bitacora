@@ -25,18 +25,18 @@ public class DAO_Users {
     private DBHelper helper;
 
 
-    public DAO_Users(Context context){
+    public DAO_Users(Context context) {
         this.context = context;
         helper = new DBHelper(context);
     }
 
-    public List<EntityUser> getUsers(){
+    public List<EntityUser> getUsers() {
         SQLiteDatabase db = helper.getWritableDatabase();
         List<EntityUser> users = new ArrayList<>();
-        try{
+        try {
             String query = "select * from Users";
             Cursor cursor = db.rawQuery(query, null);
-            while (cursor.moveToNext()){
+            while (cursor.moveToNext()) {
                 int id = Integer.parseInt(cursor.getString(0));
                 int nomina = Integer.parseInt(cursor.getString(1));
                 String apellido_paterno = cursor.getString(2);
@@ -51,20 +51,21 @@ public class DAO_Users {
                 EntityUser user = new EntityUser(id, nomina, apellido_paterno, apellido_materno, nombres, email, password, status, id_jefe, token, tokenFinish);
                 users.add(user);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.d("DB_Users", ex.getMessage());
         }
-        return  users;
+        return users;
     }
 
 
     public EntityUser getUserById(int idSearch) {
         SQLiteDatabase db = helper.getWritableDatabase();
         EntityUser user = null;
-        try{
+        try {
             String query = "select * from Users where id = " + idSearch;
             Cursor cursor = db.rawQuery(query, null);
-            while (cursor.moveToFirst()){
+            if (cursor != null) {
+                cursor.moveToFirst();
                 int id = Integer.parseInt(cursor.getString(0));
                 int nomina = Integer.parseInt(cursor.getString(1));
                 String apellido_paterno = cursor.getString(2);
@@ -79,10 +80,10 @@ public class DAO_Users {
                 user = new EntityUser(id, nomina, apellido_paterno, apellido_materno, nombres, email, password, status, id_jefe, token, tokenFinish);
 
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.d("DB_Users", ex.getMessage());
         }
-        return  user;
+        return user;
     }
 
     public boolean insertUsers(List<EntityUser> usersAsignated) {
@@ -92,7 +93,7 @@ public class DAO_Users {
 
         int idUser = 0;
 
-        if(db!=null){
+        if (db != null) {
             for (EntityUser user : usersAsignated) {
                 ContentValues values = new ContentValues();
                 values.put("id", user.getId());
@@ -107,7 +108,7 @@ public class DAO_Users {
                 values.put("token", user.getToken());
                 values.put("tokenFinish", user.getTokenFinish());
 
-                if(db.isOpen()) {
+                if (db.isOpen()) {
                     idUser = (int) db.insert(dbTableUsers.TableName, null, values);
                 }
             }
@@ -117,12 +118,13 @@ public class DAO_Users {
         return true;
     }
 
-    public EntityUser loginValidate(String username, String userpassword) {  SQLiteDatabase db = helper.getWritableDatabase();
+    public EntityUser loginValidate(String username, String userpassword) {
+        SQLiteDatabase db = helper.getWritableDatabase();
         EntityUser user = null;
-        try{
+        try {
             String query = "SELECT * FROM Users WHERE nomina = " + username + " and password = '" + userpassword + "' ORDER BY ROWID ASC LIMIT 1";
             Cursor cursor = db.rawQuery(query, null);
-            while (cursor.moveToFirst()){
+            while (cursor.moveToFirst()) {
                 int id = Integer.parseInt(cursor.getString(0));
                 int nomina = Integer.parseInt(cursor.getString(1));
                 String apellido_paterno = cursor.getString(2);
@@ -137,10 +139,10 @@ public class DAO_Users {
                 user = new EntityUser(id, nomina, apellido_paterno, apellido_materno, nombres, email, password, status, id_jefe, token, tokenFinish);
                 break;
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.d("DB_Users", ex.getMessage());
         }
-        return  user;
+        return user;
 
     }
 }
