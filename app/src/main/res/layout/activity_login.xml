@@ -15,16 +15,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="56dp"
+            android:paddingTop="12dp"
             android:paddingLeft="24dp"
-            android:paddingRight="24dp">
+            android:paddingRight="24dp"
+            android:weightSum="1">
 
             <ImageView
-                android:src="@android:drawable/ic_lock_idle_lock"
-                android:layout_width="wrap_content"
-                android:layout_height="72dp"
-                android:layout_marginBottom="24dp"
-                android:layout_gravity="center_horizontal"/>
+                android:src="@mipmap/ic_login_principal"
+                android:layout_width="190dp"
+                android:layout_height="190dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.11" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"

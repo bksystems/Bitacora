@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bitacora</string>
+    <string name="app_name">Bitácora</string>
     <string name="menu_main_new_visit">Nueva visita</string>
     <string name="menu_main_filter_employee">Filtrar Colaborador</string>
     <string name="menu_main_sincronize">Sincronizar</string>
