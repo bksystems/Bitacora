@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.jurizo.bitacora.SettingsActivity">
+
+    <include layout="@layout/action_bar_base" android:id="@+id/settings_bar_action"/>
+
+    <RelativeLayout
+        android:layout_below="@+id/settings_bar_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="7dp"
+        android:id="@+id/settings_container_user">
+
+        <TextView
+            android:id="@+id/settings_text_user_nomina"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Nómina: 000000"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:padding="3dp"
+            android:layout_alignParentTop="true" />
+
+        <TextView
+            android:id="@+id/settings_text_user_nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nombre: Apellido Paterno, Ampellido Materno, Nombres"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:padding="3dp"
+            android:layout_alignBottom="@+id/settings_text_user_nomina"
+            android:layout_toRightOf="@+id/settings_text_user_nomina"
+            android:layout_toEndOf="@+id/settings_text_user_nomina" />
+
+        <TextView
+            android:id="@+id/settings_text_user_puesto"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Puesto: Coordinador SR"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:padding="3dp"
+            android:layout_below="@+id/settings_text_user_nomina"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/settings_text_user_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Área: Sub Logistica y Movilidad"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:padding="3dp"
+            android:layout_alignBottom="@+id/settings_text_user_puesto"
+            android:layout_toRightOf="@+id/settings_text_user_puesto"
+            android:layout_toEndOf="@+id/settings_text_user_puesto" />
+
+        <TextView
+            android:id="@+id/settings_text_user_email"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:text="Email: abcdefghi@compartamos.com"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:padding="3dp"
+            android:layout_below="@+id/settings_text_user_puesto"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/settings_text_user_estatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Estatus: Activo"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:padding="3dp"
+            android:layout_below="@+id/settings_text_user_area"
+            android:layout_toRightOf="@+id/settings_text_user_email"
+            android:layout_toEndOf="@+id/settings_text_user_email" />
+
+
+
+        <Button
+            android:id="@+id/settings_btn_user_change_password"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Cambiar contraseña"
+            android:textSize="12dp"
+            android:layout_below="@+id/settings_text_user_estatus"
+            android:layout_centerHorizontal="true" />
+
+
+
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:fillViewport="true"
+        android:layout_height="wrap_content"
+        android:padding="7dp"
+        android:layout_below="@+id/settings_container_user"
+        android:id="@+id/scrollView2">
+
+
+    <RelativeLayout
+        android:paddingTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/settings_txt_etiqueta_colaboradores_dependientes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11dp"
+            android:text="Colaboradores dependientes"/>
+
+        <ListView
+            android:layout_below="@+id/settings_txt_etiqueta_colaboradores_dependientes"
+            android:id="@+id/settings_lstv_colaboradores"
+            android:layout_width="wrap_content"
+
+            android:layout_height="150dp">
+
+        </ListView>
+
+        <TextView
+            android:id="@+id/settings_txt_etiqueta_configuracion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/settings_lstv_colaboradores"
+            android:textSize="11dp"
+            android:paddingTop="20dp"
+            android:text="Configuraciones de aplicación"/>
+
+        <Switch
+                android:id="@+id/settings_switch_sincronice_os"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:layout_below="@+id/settings_txt_etiqueta_configuracion"
+                android:textSize="13dp"
+                android:text="Actualizar oficinas en cada inicio" />
+
+            <Switch
+                android:id="@+id/settings_switch_sincronice_auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:textSize="13dp"
+                android:layout_below="@+id/settings_switch_sincronice_os"
+                android:text="Permitir sincronización automatica" />
+
+    </RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

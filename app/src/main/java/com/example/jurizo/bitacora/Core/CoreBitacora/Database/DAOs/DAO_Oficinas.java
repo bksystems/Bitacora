@@ -64,6 +64,7 @@ public class DAO_Oficinas {
         if (db != null) {
             for (EntityOficina os : listOficinas) {
                 ContentValues values = new ContentValues();
+                values.put("id", os.getId());
                 values.put("cc", os.getCc());
                 values.put("direccion", os.getDireccion());
                 values.put("subdireccion", os.getSubdireccion());

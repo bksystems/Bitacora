@@ -18,9 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="5dp">
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp">
 
 
             <android.support.design.widget.TextInputLayout
@@ -28,12 +28,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_marginTop="2dp"
-                android:textColorHint="#b3b3b3">
+                android:textColorHint="#a4a4a4">
 
                 <TextView
                     android:id="@+id/visit_textview_selecionar_colaborador"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="9dp"
                     android:hint="Filtrar por colaborador"
                     android:inputType="number" />
             </android.support.design.widget.TextInputLayout>
@@ -51,18 +52,17 @@
                     android:layout_height="wrap_content"
                     android:spinnerMode="dialog"
                     android:layout_centerHorizontal="true"
-                    style="spinnerStyle"
                     android:layout_centerVertical="true"/>
 
             </android.support.design.widget.TextInputLayout>
 
-            <ListView
-                android:id="@+id/visit_lst_visitas"
+            <com.baoyz.swipemenulistview.SwipeMenuListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:id="@+id/visit_lst_visitas">
 
-            </ListView>
+            </com.baoyz.swipemenulistview.SwipeMenuListView>
 
         </LinearLayout>
 

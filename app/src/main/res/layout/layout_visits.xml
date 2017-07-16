@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="78dp"
+    android:layout_height="45dp"
     android:layout_margin="1dp"
     android:padding="3dp" >
 
@@ -10,18 +10,23 @@
         android:id="@+id/layout_visita_imagen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="1dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="3dp"
+        app:srcCompat="@mipmap/ic_calendar"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:padding="1dp"
-        app:srcCompat="@mipmap/ic_calendar" />
+        android:layout_alignBottom="@+id/layout_visita_oficina" />
 
     <TextView
         android:id="@+id/layout_visita_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textSize="15dp"
+        android:textSize="13dp"
         android:padding="3dp"
         android:textColor="@color/listview_visita_nombre"
         android:layout_alignParentTop="true"
@@ -34,13 +39,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="3dp"
-        android:textSize="12dp"
+        android:textSize="10dp"
         android:textStyle="bold"
         android:text="Fecha"
         android:textColor="@color/listview_visita_fecha"
-        android:layout_toRightOf="@+id/layout_visita_imagen"
-        android:layout_toEndOf="@+id/layout_visita_imagen"
-        android:layout_below="@+id/layout_visita_oficina" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:id="@+id/layout_visita_oficina"
@@ -48,7 +53,7 @@
         android:layout_height="wrap_content"
         android:padding="3dp"
         android:textStyle="bold"
-        android:textSize="12dp"
+        android:textSize="11dp"
         android:text="Oficina"
         android:textColor="@color/listview_visita_oficina"
         android:layout_below="@+id/layout_visita_usuario"
@@ -57,13 +62,15 @@
 
     <ImageView
         android:id="@+id/layout_visita_imagen_status"
-        android:layout_width="wrap_content"
+        android:layout_width="17dp"
         android:padding="3dp"
-        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_height="17dp"
         app:srcCompat="@drawable/ic_green_point"
-        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/layout_visita_usuario" />
 
     <TextView
         android:id="@+id/layout_visita_id"

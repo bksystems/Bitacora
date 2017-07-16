@@ -6,19 +6,29 @@
     <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_add_black_24dp"
-        android:orderInCategory="1"
         android:title="@string/menu_main_new_visit"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_people_black_24dp"
-        android:orderInCategory="2"
-        android:title="@string/menu_main_filter_employee"
-        app:showAsAction="ifRoom" />
+        android:orderInCategory="1"
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_sync"
         android:icon="@drawable/ic_autorenew_black_24dp"
-        android:orderInCategory="3"
         android:title="@string/menu_main_sincronize"
-        app:showAsAction="ifRoom" />
+        android:orderInCategory="2"
+        android:visible="true"
+        app:showAsAction="always" />
+
+    <group>
+        <item
+            android:id="@+id/action_options"
+            android:icon="@drawable/ic_build_black_24dp"
+            android:title="Opciones"
+            android:orderInCategory="3" />
+
+        <item
+            android:id="@+id/action_logout"
+            android:icon="@drawable/ic_close_black_24dp"
+            android:orderInCategory="4"
+            android:title="Salir" />
+    </group>
+
 </menu>

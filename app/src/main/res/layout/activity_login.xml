@@ -22,8 +22,8 @@
 
             <ImageView
                 android:src="@mipmap/ic_login_principal"
-                android:layout_width="190dp"
-                android:layout_height="190dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="0.11" />
@@ -63,6 +63,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="24dp"
                 android:padding="12dp"
+
                 android:text="Ingresar a bitacora"/>
 
             <android.support.design.widget.TextInputLayout

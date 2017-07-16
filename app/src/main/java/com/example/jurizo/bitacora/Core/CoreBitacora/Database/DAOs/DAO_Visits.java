@@ -113,4 +113,17 @@ public class DAO_Visits {
 
         return true;
     }
+
+    public boolean clear() {
+        boolean result = false;
+        try {
+            SQLiteDatabase db = helper.getWritableDatabase();
+            db.execSQL("DROP TABLE IF EXISTS " + dbTableVisits.TableName);
+            result = true;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            result = false;
+        }
+        return result;
+    }
 }

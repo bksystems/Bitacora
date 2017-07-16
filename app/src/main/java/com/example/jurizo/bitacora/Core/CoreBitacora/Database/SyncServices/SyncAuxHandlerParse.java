@@ -2,8 +2,12 @@ package com.example.jurizo.bitacora.Core.CoreBitacora.Database.SyncServices;
 
 import android.util.Log;
 
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Areas;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Puestos;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Users;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityArea;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityOficina;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityPuesto;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityUser;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityVisita;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.SysDbVersionEntity;
@@ -83,6 +87,7 @@ public class SyncAuxHandlerParse {
             JSONArray jsonUserLogin = jsonLoginResult.getJSONArray("data");
 
             if (jsonUserLogin.length() > 0) {
+
                 for (int i = 0; i < jsonUserLogin.length(); i++) {
 
                     JSONObject osObj = jsonUserLogin.getJSONObject(i);
@@ -93,12 +98,15 @@ public class SyncAuxHandlerParse {
                     String nombres = osObj.getString("nombres").trim();
                     String email = osObj.getString("email").trim();
                     String password = osObj.getString("password").trim();
-                    int status = osObj.getInt("status");
+                    int id_status = osObj.getInt("id_status");
                     int id_jefe = osObj.getInt("id_jefe");
+                    int id_puesto = osObj.getInt("id_puesto");
+                    int id_area = osObj.getInt("id_area");
                     String token = osObj.getString("token").trim();
-                    String finishToken = osObj.getString("finishToken").trim();
-
-                    user = new EntityUser(id, nomina, apellido_paterno, apellido_materno, nombres, email, password, status, id_jefe, token, finishToken);
+                    String tokenFinish = osObj.getString("finishToken").trim();
+                    EntityPuesto puesto = new EntityPuesto(id_puesto, "");
+                    EntityArea area = new EntityArea(id_area, "");
+                    user = new EntityUser(id, nomina, apellido_paterno, apellido_materno, nombres, email, password, id_status, id_jefe, puesto, area, token, tokenFinish);
                 }
             } else {
                 user = null;
@@ -129,12 +137,16 @@ public class SyncAuxHandlerParse {
                     String nombres = osObj.getString("nombres").trim();
                     String email = osObj.getString("email").trim();
                     String password = osObj.getString("password").trim();
-                    int status = osObj.getInt("status");
+                    int id_status = osObj.getInt("id_status");
                     int id_jefe = osObj.getInt("id_jefe");
+                    int id_puesto = osObj.getInt("id_puesto");
+                    int id_area = osObj.getInt("id_area");
+                    EntityPuesto puesto = new EntityPuesto(id_puesto, "");
+                    EntityArea area = new EntityArea(id_area, "");
                     String token = "";
                     String finishToken = "";
 
-                    EntityUser user = new EntityUser(id, nomina, apellido_paterno, apellido_materno, nombres, email, password, status, id_jefe, token, finishToken);
+                    EntityUser user = new EntityUser(id, nomina, apellido_paterno, apellido_materno, nombres, email, password, id_status, id_jefe, puesto, area, token, finishToken);
                     users.add(user);
                 }
             } else {
@@ -165,8 +177,9 @@ public class SyncAuxHandlerParse {
                     Integer oficina_id = osObj.getInt("oficina_id");
                     Integer isupdate = osObj.getInt("isupdate");
                     Integer status = osObj.getInt("status");
-
-                    EntityUser usr = new EntityUser(user_id, 0, "", "", "", "", "", 0, 0, "", "");
+                    EntityPuesto puesto = new EntityPuesto(0, "");
+                    EntityArea area = new EntityArea(0, "");
+                    EntityUser usr = new EntityUser(user_id, 0, "", "", "", "", "", 0, 0,puesto,area, "", "");
                     EntityOficina os = new EntityOficina(oficina_id, 0, "", "", "", "", "", 0,0,"");
                     EntityVisita visita = new EntityVisita(id, fehca, usr, os, isupdate, status);
                     visitas.add(visita);
@@ -178,5 +191,47 @@ public class SyncAuxHandlerParse {
             Log.e("ParseVisita", "Json parsing error: " + e.getMessage());
         }
         return visitas;
+    }
+
+    public static List<EntityArea> AreasJSONParse(String json){
+        List<EntityArea> areas = null;
+        try{
+            JSONObject jsonObject = new JSONObject(json);
+            JSONArray jsonArray = jsonObject.getJSONArray("data");
+            if (jsonArray.length() > 0) {
+                areas = new ArrayList<>();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject areaJSONObj = jsonArray.getJSONObject(i);
+                    Integer id = areaJSONObj.getInt("id");
+                    String area = areaJSONObj.getString("area").trim();
+                    EntityArea areaEntity = new EntityArea(id, area);
+                    areas.add(areaEntity);
+                }
+            }
+        } catch (final JSONException e) {
+            Log.e("AreaParse", "Json parsing error: " + e.getMessage());
+        }
+        return areas;
+    }
+
+    public static List<EntityPuesto> PuestosJSONParse(String json){
+        List<EntityPuesto> puestos = null;
+        try{
+            JSONObject jsonObject = new JSONObject(json);
+            JSONArray jsonArray = jsonObject.getJSONArray("data");
+            if (jsonArray.length() > 0) {
+                puestos = new ArrayList<>();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject areaJSONObj = jsonArray.getJSONObject(i);
+                    Integer id = areaJSONObj.getInt("id");
+                    String puesto = areaJSONObj.getString("puesto").trim();
+                    EntityPuesto puestoEntity = new EntityPuesto(id, puesto);
+                    puestos.add(puestoEntity);
+                }
+            }
+        } catch (final JSONException e) {
+            Log.e("PuestoParse", "Json parsing error: " + e.getMessage());
+        }
+        return puestos;
     }
 }

@@ -13,12 +13,14 @@ public class EntityUser {
     private String nombres;
     private String email;
     private String password;
-    private int status;
+    private int id_status;
     private int id_jefe;
+    private EntityPuesto puesto;
+    private EntityArea area;
     private String token;
     private String tokenFinish;
 
-    public EntityUser(int id, int nomina, String apellido_paterno, String apellido_materno, String nombres, String email, String password, int status, int id_jefe, String token, String tokenFinish) {
+    public EntityUser(int id, int nomina, String apellido_paterno, String apellido_materno, String nombres, String email, String password, int id_status, int id_jefe, EntityPuesto puesto, EntityArea area, String token, String tokenFinish) {
         this.id = id;
         this.nomina = nomina;
         this.apellido_paterno = apellido_paterno;
@@ -26,8 +28,10 @@ public class EntityUser {
         this.nombres = nombres;
         this.email = email;
         this.password = password;
-        this.status = status;
+        this.id_status = id_status;
         this.id_jefe = id_jefe;
+        this.puesto = puesto;
+        this.area = area;
         this.token = token;
         this.tokenFinish = tokenFinish;
     }
@@ -88,12 +92,12 @@ public class EntityUser {
         this.password = password;
     }
 
-    public int getStatus() {
-        return status;
+    public int getId_status() {
+        return id_status;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setId_status(int status) {
+        this.id_status = id_status;
     }
 
     public int getId_jefe() {
@@ -112,6 +116,22 @@ public class EntityUser {
         this.token = token;
     }
 
+    public EntityPuesto getPuesto() {
+        return puesto;
+    }
+
+    public void setId_puesto(int id_puesto) {
+        this.puesto = puesto;
+    }
+
+    public EntityArea getArea() {
+        return area;
+    }
+
+    public void setId_area(int id_area) {
+        this.area = area;
+    }
+
     public String getTokenFinish() {
         return tokenFinish;
     }
@@ -119,4 +139,5 @@ public class EntityUser {
     public void setTokenFinish(String tokenFinish) {
         this.tokenFinish = tokenFinish;
     }
+
 }

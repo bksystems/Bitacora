@@ -4,13 +4,20 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Areas;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Oficinas;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Puestos;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Users;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Visits;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DBHelper;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.SessionManagement;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Database.Tables.dbTableVisits;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityArea;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityOficina;
+import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityPuesto;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityUser;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityVisita;
 import com.example.jurizo.bitacora.LoginActivity;
@@ -57,7 +64,7 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
     @Override
     protected EntityUser doInBackground(String... params) {
         progressDialog.setCancelable(true);
-        publishProgress("Validand usuario");
+        publishProgress("Validando usuario");
         String strUrlLogin = hostname + port + pathSyncFiles + "login.ini.php";
         try {
             String username = params[0];
@@ -67,41 +74,60 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
 
             EntityUser user = LoginValidate(strUrlLogin, username, userpassword, deviceSerie, devicesImei);
 
-            if(user != null && user.getStatus() > 0){
+            if(user != null && user.getId_status() > 0){
                 HttpHandler httpHandler = new HttpHandler();
-                publishProgress("Obteniendo usuarios");
-                List<EntityUser> usersAsignated = getUserAsignated(user);
-                if(usersAsignated == null){
-                    usersAsignated = new ArrayList<>();
-                }
-                usersAsignated.add(user);
-                DAO_Users dao_users = new DAO_Users(context);
-                if(dao_users.insertUsers(usersAsignated)){
-                    publishProgress("Obteniendo oficinas");
+                publishProgress("Descargando catalogo de oficinas");
+                String jsonOficinas = httpHandler.makeServicesCall(ConfigServerConnection.getURLOficinas());
+                publishProgress("Descargando catalogo de puestos");
+                String jsonPuestos = httpHandler.makeServicesCall(ConfigServerConnection.getURLPuestos());
+                publishProgress("Descargando catalogo de areas");
+                String jsonAreas = httpHandler.makeServicesCall(ConfigServerConnection.getURLAreas());
 
-                    String strUrl = hostname + port + pathSyncFiles + "getOficinas.php";
-                    String jsonStrOficinas = httpHandler.makeServicesCall(strUrl);
-                    List<EntityOficina> listOficinas = null;
-                    if (jsonStrOficinas != null) {
-                        DAO_Oficinas daoOficinas = new DAO_Oficinas(context);
-                        listOficinas = SyncAuxHandlerParse.OficinasJSONParse(jsonStrOficinas);
-                        if (listOficinas != null && listOficinas.size() > 0) {
-                            publishProgress("Actualizando estructura de oficinas....");
-                            daoOficinas.updateOficinas(listOficinas);
-                            publishProgress("Se actualizo la estructura de oficinas....");
+                List<EntityOficina> oficinas = SyncAuxHandlerParse.OficinasJSONParse(jsonOficinas);
+                List<EntityPuesto> puestos = SyncAuxHandlerParse.PuestosJSONParse(jsonPuestos);
+                List<EntityArea> areas = SyncAuxHandlerParse.AreasJSONParse(jsonAreas);
+
+                if(oficinas.size() > 0 && puestos.size() > 0 && areas.size() > 0){
+
+                    DAO_Oficinas daoOficinas = new DAO_Oficinas(context);
+                    DAO_Puestos daoPuestos = new DAO_Puestos(context);
+                    DAO_Areas daoAreas = new DAO_Areas(context);
+
+                    publishProgress("Actualizando catalogo de oficinas");
+                    daoOficinas.updateOficinas(oficinas);
+
+                    publishProgress("Actualizando catalogo de puestos");
+                    daoPuestos.updatePuestos(puestos);
+
+                    publishProgress("Actualizando catalogo de areas");
+                    daoAreas.updateAreas(areas);
+
+                    publishProgress("Actualizando información de usuarios");
+                    List<EntityUser> users = new ArrayList<>();
+                    users.add(user);
+                    int consecutivo = 0;
+                    while (consecutivo < users.size()){
+                        int usrId = users.get(consecutivo).getId();
+                        List<EntityUser> usrAsignated = getUserAsignated(usrId);
+                        if(usrAsignated != null && usrAsignated.size() > 0) {
+                            users.addAll(usrAsignated);
                         }
-                        publishProgress("Obteniendo visitas....");
-                        String strUrlVisitas = hostname + port + pathSyncFiles + "getVisitas.php";
-                        List<EntityVisita> visitas = getVisitasServer(strUrlVisitas, usersAsignated);
-                        if(visitas != null && visitas.size() > 0) {
-                            publishProgress("Procesando visitas....");
-                            DAO_Visits dao_visits = new DAO_Visits(context);
-                            dao_visits.insertVisitas(visitas);
-                            publishProgress("visitas actualizadas correctamente....");
-                        }
+                        consecutivo++;
+                    }
+                    DAO_Users daoUsers = new DAO_Users(context);
+                    daoUsers.insertUsers(users);
+
+
+                    publishProgress("Descargando visitas guardas en sistema");
+                    List<EntityVisita> visitas = getVisitasServer(ConfigServerConnection.getURLVisitas(), users);
+                    if(visitas != null && visitas.size() > 0) {
+                        publishProgress("Procesando visitas..");
+                        DAO_Visits dao_visits = new DAO_Visits(context);
+                        dao_visits.insertVisitas(visitas);
                     }
                 }
             }
+
             return user;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -156,7 +182,7 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
         return  visitas;
     }
 
-    private List<EntityUser> getUserAsignated(EntityUser user) {
+    private List<EntityUser> getUserAsignated(int userId) {
         List<EntityUser> users = null;
 
         String strUrl = hostname + port + pathSyncFiles + "getUsers.php";
@@ -169,7 +195,7 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
             httpURLConnection.setDoInput(true);
             OutputStream outputStream = httpURLConnection.getOutputStream();
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-            String post_data = URLEncoder.encode("id_jefe", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(user.getId()), "UTF-8");
+            String post_data = URLEncoder.encode("id_jefe", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(userId), "UTF-8");
             bufferedWriter.write(post_data);
             bufferedWriter.flush();
             bufferedWriter.close();
@@ -197,7 +223,7 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
     private EntityUser LoginValidate(String strUrl, String username, String userpassword, String deviceSerie, String devicesImei) {
         EntityUser user = null;
         user = validateInDataBase(username, userpassword);
-        if(user == null || user.getStatus() == 0 || tokenIsValid(user) == false){
+        if(user == null || user.getId_status() == 0 || tokenIsValid(user) == false){
             user = validateInServer(strUrl, username, userpassword, deviceSerie, devicesImei);
         }
         return  user;
@@ -236,6 +262,9 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
     private EntityUser validateInServer(String strUrl, String username, String userpassword, String deviceSerie, String devicesImei) {
         EntityUser user = null;
         try {
+            DAO_Visits daoVisitas = new DAO_Visits(context);
+            daoVisitas.clear();
+
             URL url = new URL(strUrl);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
@@ -290,13 +319,19 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
         progressDialog.cancel();
 
         if(user != null){
-            switch (user.getStatus()){
+            switch (user.getId_status()){
                 case 0:
                     alertDialog.setMessage("Usuario bloqueado");
                     alertDialog.show();
                     break;
                 case 1:
+                    SessionManagement session = new SessionManagement(context);
+                    session.createLoginSession(String.valueOf(user.getId()), String.valueOf(user.getNomina()), user.getApellido_paterno() + " " + user.getApellido_materno() + " "+ user.getNombres());
                     Intent intent = new Intent(context, PrincipalActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
 
 

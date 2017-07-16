@@ -46,11 +46,19 @@ public class AdapterSpinnerCustom extends BaseAdapter {
         convertView = inflater.inflate(R.layout.custom_spinner, null);
         TextView userName = (TextView)convertView.findViewById(R.id.custom_spinner_nombre);
         TextView userId = (TextView)convertView.findViewById(R.id.custom_spinner_id);
+        TextView userPuesto = (TextView) convertView.findViewById(R.id.custom_spinner_puesto);
+        //TextView userArea = (TextView) convertView.findViewById(R.id.custom_spinner_area);
         String nomina = "";
+        String puesto = "";
+        //String area = "";
         if(users.get(position).getId() > 0 || users.get(position).getNomina() > 0) {
             nomina = String.valueOf(users.get(position).getNomina()) + " - " ;
+            puesto = users.get(position).getPuesto().getPuesto();
+            //area = users.get(position).getArea().getArea();
         }
         userName.setText(nomina + users.get(position).getApellido_paterno() + " " + users.get(position).getApellido_materno() + " " + users.get(position).getNombres());
+        userPuesto.setText(puesto);
+       // userArea.setText(area);
 
         return convertView;
     }

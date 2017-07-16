@@ -48,7 +48,6 @@ public class LoginActivity extends AppCompatActivity {
                     String imei = getIMEI();
                     LoginSync loginSync = new LoginSync(context);
                     loginSync.execute(user_name, user_password, serialNumber, imei);
-
                 }
             }
         });

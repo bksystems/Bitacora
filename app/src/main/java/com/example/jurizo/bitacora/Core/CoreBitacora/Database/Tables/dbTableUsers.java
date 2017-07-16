@@ -14,8 +14,10 @@ public class dbTableUsers {
     private static String UserNombres = "nombres text not null, ";
     private static String UserEmail = "email text not null, ";
     private static String UserPassword = "password text not null, ";
-    private static String UserStatus = "status integer null, ";
+    private static String UserStatus = "id_status integer null, ";
     private static String UserIdJefe = "id_jefe integer, ";
+    private static String UserIdPuesto = "id_puesto integer null, ";
+    private static String UserIdArea = "id_area integer null, ";
     private static String UserToken = "token text not null, ";
     private static String UserTokenFinish = "tokenFinish text not null ";
 
@@ -29,6 +31,8 @@ public class dbTableUsers {
             + UserPassword
             + UserStatus
             + UserIdJefe
+            + UserIdPuesto
+            + UserIdArea
             + UserToken
             + UserTokenFinish
             + ");";
