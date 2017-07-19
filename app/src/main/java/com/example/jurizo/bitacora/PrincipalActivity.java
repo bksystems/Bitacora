@@ -179,6 +179,10 @@ public class PrincipalActivity extends AppCompatActivity {
                 Intent intentSettings = new Intent(PrincipalActivity.this, SettingsActivity.class);
                 startActivity(intentSettings);
                 return true;
+            case R.id.action_office_ubication:
+                Intent intentUbicationOS = new Intent(PrincipalActivity.this, ActivityOficinasUbication.class);
+                startActivity(intentUbicationOS);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

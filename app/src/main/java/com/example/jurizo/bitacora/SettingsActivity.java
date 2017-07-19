@@ -4,14 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Users;
 import com.example.jurizo.bitacora.Core.CoreBitacora.Database.SessionManagement;
@@ -32,6 +41,10 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView txtEmail;
     private TextView txtEstatus;
     private ListView listViewColDependientes;
+    private Button btnChangePassword;
+    public EditText passwordNueva;
+    private EditText passwordActual;
+    private EditText passwordConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +64,124 @@ public class SettingsActivity extends AppCompatActivity {
         txtEmail =  (TextView) findViewById(R.id.settings_text_user_email);
         txtEstatus =  (TextView) findViewById(R.id.settings_text_user_estatus);
         listViewColDependientes = (ListView)findViewById(R.id.settings_lstv_colaboradores);
+        btnChangePassword = (Button) findViewById(R.id.settings_btn_user_change_password);
+        btnChangePassword.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder mBuilderChangePassword = new AlertDialog.Builder(SettingsActivity.this);
+                View mView = getLayoutInflater().inflate(R.layout.change_password, null);
+
+                passwordActual = (EditText)mView.findViewById(R.id.login_user_change_password_actual);
+                passwordNueva = (EditText)mView.findViewById(R.id.login_user_change_password_nueva);
+                passwordConfirm = (EditText)mView.findViewById(R.id.login_user_change_password_confirmar);
+                Button passwordBtnConfirm = (Button)mView.findViewById(R.id.login_user_change_button_confirmar);
+                ImageButton passwordBtnCancel = (ImageButton)mView.findViewById(R.id.login_user_change_button_cancelar);
+
+                mBuilderChangePassword.setView(mView);
+                final AlertDialog dialog = mBuilderChangePassword.create();
+
+                passwordBtnConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(NewsPasswordsValidate(passwordActual.getText().toString(), passwordNueva.getText().toString(), passwordConfirm.getText().toString())){
+                            Toast.makeText(context, "Cambio", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                passwordBtnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(dialog != null){
+                            dialog.dismiss();
+                        }
+                    }
+                });
+
+                passwordNueva.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if(s.length()!= 0){
+                                NewsPasswordsValidate(passwordActual.getText().toString(), passwordNueva.getText().toString(), passwordConfirm.getText().toString());
+                            }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
+                passwordConfirm.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if(s.length()!= 0){
+                            NewsPasswordsValidate(passwordActual.getText().toString(), passwordNueva.getText().toString(), passwordConfirm.getText().toString());
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
+                dialog.show();
+
+            }
+        });
+    }
+
+    private boolean NewsPasswordsValidate(String pa, String np, String cp) {
+
+            boolean valid = true;
+            String actualPas = pa.toString();
+            String newPass = np.toString();
+            String confirmPass = cp.toString();
+
+            if(actualPas.isEmpty()){
+                passwordActual.setError("Por favor ingresa tu contraseña actual");
+                valid = false;
+            }else{
+                passwordActual.setError(null);
+            }
+
+            if(newPass.isEmpty()){
+                passwordNueva.setError("Por favor ingresa tu nueva contraseña");
+                valid = false;
+            }else{
+                passwordNueva.setError(null);
+            }
+
+            if(confirmPass.isEmpty()){
+                passwordConfirm.setError("Por favor confirma tu nueva contraseña");
+                valid = false;
+            }else{
+                passwordConfirm.setError(null);
+            }
+
+            if(!confirmPass.toString().equals(newPass.toString())){
+                passwordConfirm.setError("Las contraseñas no coinciden");
+                passwordNueva.setError("Las contraseñas no coinciden");
+                valid = false;
+            }else{
+                passwordConfirm.setError(null);
+                passwordNueva.setError(null);
+            }
+
+            return valid;
+
     }
 
     private void InitToolBar() {
