@@ -3,10 +3,13 @@ package com.example.jurizo.bitacora;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -19,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
 import com.google.android.gms.location.LocationServices;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -31,21 +35,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class ActivityOficinasUbication extends AppCompatActivity
-        implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        GoogleMap.OnMarkerDragListener,
-        GoogleMap.OnMapLongClickListener,
-        GoogleMap.OnMarkerClickListener,
-        View.OnClickListener {
+import java.io.IOException;
+import java.util.List;
 
-    private GoogleMap mMap;
-    private GoogleApiClient mGoogleApiClient;
+public class ActivityOficinasUbication extends AppCompatActivity
+        implements OnMapReadyCallback {
     private Context context;
-    private GoogleMap googleMap;
-    private GoogleApiClient googleApiClient;
-    private double longitude;
+    private GoogleMap mMap;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
     private double latitude;
+    private double longitude;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +60,68 @@ public class ActivityOficinasUbication extends AppCompatActivity
 
         LoadToolBar();
 
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                try {
+                    UpdateMarker(latitude, longitude);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+             requestPermissions(new String[]{
+                     Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET
+             },10);
+                return;
+            }else{
+                locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
+            }
+
+        }
+
+
+    }
+
+    private void UpdateMarker(double latitude, double longitude) throws IOException {
+        LatLng sydney = new LatLng(latitude, longitude);
+        Geocoder geocoder = new Geocoder(context);
+        List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 10);
+        mMap.addMarker(new MarkerOptions().position(sydney).title(addressList.get(0).getLocality()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 10:
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+                }
+                return;
+        }
     }
 
     private void LoadToolBar() {
@@ -89,114 +146,12 @@ public class ActivityOficinasUbication extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        mMap.setOnMarkerDragListener(this);
-        mMap.setOnMapLongClickListener(this);
-    }
-
-
-    private void getCurrentLocation() {
-        mMap.clear();
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-            if (location != null) {
-                //Getting longitude and latitude
-                longitude = location.getLongitude();
-                latitude = location.getLatitude();
-
-                //moving the map to location
-                moveMap();
-            }
-            return;
-        }
-
-    }
-
-    private void moveMap() {
-        /**
-         * Creating the latlng object to store lat, long coordinates
-         * adding marker to map
-         * move the camera with animation
-         */
-        LatLng latLng = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .draggable(true)
-                .title("Marker in India"));
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-
+        //LatLng sydney = new LatLng(latitude, longitude);
+        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
     }
 
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        getCurrentLocation();
-    }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-        mMap.addMarker(new MarkerOptions().position(latLng).draggable(true));
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        Toast.makeText(ActivityOficinasUbication.this, "onMarkerClick", Toast.LENGTH_SHORT).show();
-        return true;
-    }
-
-    @Override
-    public void onMarkerDragStart(Marker marker) {
-        Toast.makeText(ActivityOficinasUbication.this, "onMarkerDragStart", Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
-    public void onMarkerDrag(Marker marker) {
-        Toast.makeText(ActivityOficinasUbication.this, "onMarkerDrag", Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
-    public void onMarkerDragEnd(Marker marker) {
-        // getting the Co-ordinates
-        latitude = marker.getPosition().latitude;
-        longitude = marker.getPosition().longitude;
-
-        //move to current position
-        moveMap();
-
-    }
-
-    @Override
-    protected void onStart() {
-        googleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        googleApiClient.disconnect();
-        super.onStop();
-    }
-
-    @Override
-    public void onClick(View v) {
-
-    }
 }
