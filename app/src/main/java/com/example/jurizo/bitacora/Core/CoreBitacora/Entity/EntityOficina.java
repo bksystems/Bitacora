@@ -16,8 +16,15 @@ public class EntityOficina {
     private int renovada;
     private int cuenta_ci;
     private String carrier;
+    private int plantilla_autorizada;
+    private int plantilla_ventas;
+    private int inventario_dm;
+    private float latitud;
+    private float longitud;
 
-    public EntityOficina(int id, int cc, String direccion, String subdireccion, String region, String oficina, String segmento, int renovada, int cuenta_ci, String carrier) {
+    public EntityOficina(int id, int cc, String direccion, String subdireccion,
+                         String region, String oficina, String segmento, int renovada, int cuenta_ci,
+                         String carrier, int plantilla_autorizada, int plantilla_ventas, int inventario_dm, float latitud, float longitud) {
         this.id = id;
         this.cc = cc;
         this.direccion = direccion;
@@ -28,6 +35,11 @@ public class EntityOficina {
         this.renovada = renovada;
         this.cuenta_ci = cuenta_ci;
         this.carrier = carrier;
+        this.plantilla_autorizada = plantilla_autorizada;
+        this.plantilla_ventas = plantilla_ventas;
+        this.inventario_dm = inventario_dm;
+        this.latitud = latitud;
+        this.longitud = longitud;
     }
 
     public int getId() {
@@ -108,5 +120,45 @@ public class EntityOficina {
 
     public void setCarrier(String carrier) {
         this.carrier = carrier;
+    }
+
+    public int getPlantilla_autorizada() {
+        return plantilla_autorizada;
+    }
+
+    public void setPlantilla_autorizada(int plantilla_autorizada) {
+        this.plantilla_autorizada = plantilla_autorizada;
+    }
+
+    public int getPlantilla_ventas() {
+        return plantilla_ventas;
+    }
+
+    public void setPlantilla_ventas(int plantilla_ventas) {
+        this.plantilla_ventas = plantilla_ventas;
+    }
+
+    public int getInventario_dm() {
+        return inventario_dm;
+    }
+
+    public void setInventario_dm(int inventario_dm) {
+        this.inventario_dm = inventario_dm;
+    }
+
+    public float getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(float latitud) {
+        this.latitud = latitud;
+    }
+
+    public float getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(float longitud) {
+        this.longitud = longitud;
     }
 }

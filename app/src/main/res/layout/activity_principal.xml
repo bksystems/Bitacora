@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:fillViewport="true">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -22,49 +22,35 @@
             android:paddingRight="3dp"
             android:paddingTop="3dp">
 
-
-            <android.support.design.widget.TextInputLayout
+            <Spinner
+                android:id="@+id/principal_spinner_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginTop="2dp"
-                android:textColorHint="#a4a4a4">
+                android:spinnerMode="dialog"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
-                <TextView
-                    android:id="@+id/visit_textview_selecionar_colaborador"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="9dp"
-                    android:hint="Filtrar por colaborador"
-                    android:inputType="number" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
+            <TextView
+                android:id="@+id/principal_text_title_list_visitas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginTop="2dp"
-                android:textColorHint="#b3b3b3">
-
-                <Spinner
-                    android:id="@+id/principal_spinner_user"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:spinnerMode="dialog"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"/>
-
-            </android.support.design.widget.TextInputLayout>
+                android:textAlignment="center"
+                android:paddingTop="10dp"
+                android:text="Visitas ejecutadas"
+                android:layout_below="@+id/principal_spinner_user"/>
 
             <com.baoyz.swipemenulistview.SwipeMenuListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:id="@+id/visit_lst_visitas">
+                android:id="@+id/visit_lst_visitas"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/principal_text_title_list_visitas">
 
             </com.baoyz.swipemenulistview.SwipeMenuListView>
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </ScrollView>
 

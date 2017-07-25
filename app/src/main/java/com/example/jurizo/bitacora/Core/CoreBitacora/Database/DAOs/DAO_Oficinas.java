@@ -45,7 +45,13 @@ public class DAO_Oficinas {
                 int renovada = Integer.parseInt(cursor.getString(7));
                 int cuenta_ci = Integer.parseInt(cursor.getString(8));
                 String carrier = cursor.getString(9);
-                EntityOficina ofi = new EntityOficina(id, cc, direccion, subdireccion, region, oficina, segmento, renovada, cuenta_ci, carrier);
+                int plantilla_autorizada = Integer.parseInt(cursor.getString(10));
+                int plantilla_ventas = Integer.parseInt(cursor.getString(11));
+                int inventario_dm = Integer.parseInt(cursor.getString(12));
+                float latitud = Float.parseFloat(cursor.getString(13));
+                float longitud = Float.parseFloat(cursor.getString(14));
+                EntityOficina ofi = new EntityOficina(id, cc, direccion, subdireccion, region, oficina, segmento,
+                        renovada, cuenta_ci, carrier, plantilla_autorizada, plantilla_ventas, inventario_dm, latitud, longitud);
                 oficinas.add(ofi);
             }
         } catch (Exception ex) {
@@ -74,6 +80,11 @@ public class DAO_Oficinas {
                 values.put("renovada", os.getRenovada());
                 values.put("cuenta_ci", os.getCuenta_ci());
                 values.put("carrier", os.getCarrier());
+                values.put("plantilla_autorizada", os.getPlantilla_autorizada());
+                values.put("plantilla_ventas", os.getPlantilla_ventas());
+                values.put("inventario_dm", os.getInventario_dm());
+                values.put("latitud", os.getLatitud());
+                values.put("longitud", os.getLongitud());
 
                 if (db.isOpen()) {
                     idOficina = (int) db.insert(dbTableOficinas.TableName, null, values);
@@ -103,13 +114,31 @@ public class DAO_Oficinas {
                 int renovada = Integer.parseInt(cursor.getString(7));
                 int cuenta_ci = Integer.parseInt(cursor.getString(8));
                 String carrier = cursor.getString(9);
-                oficinaObject = new EntityOficina(id, cc, direccion, subdireccion, region, oficina, segmento, renovada, cuenta_ci, carrier);
-
+                int plantilla_autorizada = Integer.parseInt(cursor.getString(10));
+                int plantilla_ventas = Integer.parseInt(cursor.getString(11));
+                int inventario_dm = Integer.parseInt(cursor.getString(12));
+                float latitud = Float.parseFloat(cursor.getString(13));
+                float longitud = Float.parseFloat(cursor.getString(14));
+                oficinaObject = new EntityOficina(id, cc, direccion, subdireccion, region, oficina, segmento,
+                        renovada, cuenta_ci, carrier, plantilla_autorizada, plantilla_ventas, inventario_dm, latitud, longitud);
             }
         } catch (Exception ex) {
             Log.d("DB_Oficina", ex.getMessage());
         }
         return oficinaObject;
+    }
+
+    public int getCount() {
+        try {
+            String countQuery = "SELECT  * FROM " + dbTableOficinas.TableName;
+            SQLiteDatabase db = helper.getWritableDatabase();
+            Cursor cursor = db.rawQuery(countQuery, null);
+            int cnt = cursor.getCount();
+            cursor.close();
+            return cnt;
+        }catch (Exception ex){
+            return 0;
+        }
     }
 
 

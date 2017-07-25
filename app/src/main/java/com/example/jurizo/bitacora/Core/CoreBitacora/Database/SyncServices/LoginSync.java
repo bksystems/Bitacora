@@ -93,8 +93,10 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
                     DAO_Puestos daoPuestos = new DAO_Puestos(context);
                     DAO_Areas daoAreas = new DAO_Areas(context);
 
-                    publishProgress("Actualizando catalogo de oficinas");
-                    daoOficinas.updateOficinas(oficinas);
+                    if(daoOficinas.getCount() < oficinas.size()) {
+                        publishProgress("Actualizando catalogo de oficinas");
+                        daoOficinas.updateOficinas(oficinas);
+                    }
 
                     publishProgress("Actualizando catalogo de puestos");
                     daoPuestos.updatePuestos(puestos);

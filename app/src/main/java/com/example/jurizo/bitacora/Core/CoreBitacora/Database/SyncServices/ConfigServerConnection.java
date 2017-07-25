@@ -6,7 +6,7 @@ package com.example.jurizo.bitacora.Core.CoreBitacora.Database.SyncServices;
 
 public class ConfigServerConnection {
 
-    private final static String hostname = "http://192.168.100.20/BitacoraWS"; //"http://bitacoralym.esy.es"; //"http://192.168.100.20/BitacoraWS";
+    private final static String hostname = "http://bitacoralym.esy.es"; //"http://192.168.100.20/BitacoraWS";
     private final static String port = "";
     private final static String pathSyncFiles = "/core/wservices_mobile/";
 

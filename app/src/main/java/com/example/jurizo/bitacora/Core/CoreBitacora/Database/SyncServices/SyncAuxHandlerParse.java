@@ -67,11 +67,15 @@ public class SyncAuxHandlerParse {
                 int renovada = osObj.getInt("renovada");
                 int cuenta_ci = osObj.getInt("cuenta_ci");
                 String carrier = osObj.getString("carrier").trim();
+                int plantilla_autorizada = osObj.getInt("plantilla_autorizada");
+                int plantilla_ventas = osObj.getInt("plantilla_ventas");
+                int inventario_dm = osObj.getInt("inventario_dm");
+                float latitud = Float.parseFloat(osObj.getString("latitud"));
+                float longitud = Float.parseFloat(osObj.getString("longitud"));
 
-                EntityOficina oficina = new EntityOficina(id, cc, direccion, subdireccion, region, os, segmento, renovada, cuenta_ci, carrier);
-
+                EntityOficina oficina = new EntityOficina(id, cc, direccion, subdireccion, region, os, segmento,
+                        renovada, cuenta_ci, carrier, plantilla_autorizada, plantilla_ventas, inventario_dm, latitud, longitud);
                 oficinas.add(oficina);
-
             }
         } catch (final JSONException e) {
             Log.e("ParseOficina", "Json parsing error: " + e.getMessage());
@@ -180,7 +184,7 @@ public class SyncAuxHandlerParse {
                     EntityPuesto puesto = new EntityPuesto(0, "");
                     EntityArea area = new EntityArea(0, "");
                     EntityUser usr = new EntityUser(user_id, 0, "", "", "", "", "", 0, 0,puesto,area, "", "");
-                    EntityOficina os = new EntityOficina(oficina_id, 0, "", "", "", "", "", 0,0,"");
+                    EntityOficina os = new EntityOficina(oficina_id, 0, "", "", "", "", "", 0,0,"",0,0,0,0,0);
                     EntityVisita visita = new EntityVisita(id, fehca, usr, os, isupdate, status);
                     visitas.add(visita);
                 }
