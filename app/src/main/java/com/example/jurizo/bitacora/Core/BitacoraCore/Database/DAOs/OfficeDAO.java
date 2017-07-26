@@ -8,8 +8,6 @@ import android.util.Log;
 
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DBHelper;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableOffice;
-import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.dbTableOficinas;
-import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityOficina;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Models.Office;
 
 import java.util.ArrayList;
@@ -124,8 +122,8 @@ public class OfficeDAO {
         int contador = 0;
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
-            db.execSQL("DROP TABLE IF EXISTS " + dbTableOficinas.TableName);
-            db.execSQL(dbTableOficinas.OnCreate);
+            db.execSQL("DROP TABLE IF EXISTS " + TableOffice.TableName);
+            db.execSQL(TableOffice.onCreate);
 
             int idOficina = 0;
 
@@ -134,7 +132,7 @@ public class OfficeDAO {
                     ContentValues values = getContentValues(os);
                     if (values != null) {
                         if (db.isOpen()) {
-                            idOficina = (int) db.insert(dbTableOficinas.TableName, null, values);
+                            idOficina = (int) db.insert(TableOffice.TableName, null, values);
                             if(idOficina > 0){
                                 contador++;
                             }

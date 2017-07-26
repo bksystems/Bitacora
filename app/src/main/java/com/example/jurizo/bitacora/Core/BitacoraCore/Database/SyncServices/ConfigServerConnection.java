@@ -15,6 +15,9 @@ public class ConfigServerConnection {
     private final static String getURLAreas = hostname + port + pathSyncFiles + "getAreas.php";
     private final static String getURLVisitas = hostname + port + pathSyncFiles + "getVisitas.php";
 
+
+    private final static String URLOffices = hostname + port + pathSyncFiles + "getVisitas.php";
+
     public static String getHostname() {
         return hostname;
     }
@@ -41,5 +44,9 @@ public class ConfigServerConnection {
 
     public static String getURLVisitas() {
         return getURLVisitas;
+    }
+
+    public static String getURLOffices() {
+        return URLOffices;
     }
 }

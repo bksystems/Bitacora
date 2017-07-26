@@ -1,13 +1,16 @@
 package com.example.jurizo.bitacora.Core.BitacoraCore.Database.SyncServices;
 
+import android.app.Application;
 import android.util.Log;
 
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.LogsDAO;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityArea;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityOficina;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityPuesto;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityUser;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityVisita;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.SysDbVersionEntity;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Models.Office;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +24,8 @@ import java.util.List;
  */
 
 public class SyncAuxHandlerParse {
+
+    private final static String TAG = "SynParse";
 
     public static SysDbVersionEntity DBVersionParse(String jsonStrVersionDB) {
         SysDbVersionEntity objVersion = null;
@@ -234,5 +239,15 @@ public class SyncAuxHandlerParse {
             Log.e("PuestoParse", "Json parsing error: " + e.getMessage());
         }
         return puestos;
+    }
+
+    public static List<Office> Parse_Office(String jsonResponse) {
+        List<Office> offices = null;
+        try{
+            JSONObject jsonObj = new JSONObject(jsonResponse);
+        }catch (Exception ex){
+            Log.d(TAG, ex.getMessage());
+        }
+        return offices;
     }
 }
