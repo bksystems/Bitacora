@@ -1,9 +1,6 @@
 package com.example.jurizo.bitacora;
 
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
-import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,12 +10,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DBHelper;
-import com.example.jurizo.bitacora.Core.CoreBitacora.Database.SessionManagement;
-import com.example.jurizo.bitacora.Core.CoreBitacora.Database.SyncServices.SyncManager;
-
-import java.util.HashMap;
 
 public class VisitActivity extends AppCompatActivity {
 

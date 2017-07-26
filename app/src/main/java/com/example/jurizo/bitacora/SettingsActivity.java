@@ -1,13 +1,11 @@
 package com.example.jurizo.bitacora;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,10 +20,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Users;
-import com.example.jurizo.bitacora.Core.CoreBitacora.Database.SessionManagement;
-import com.example.jurizo.bitacora.Core.CoreBitacora.Database.SyncServices.SyncManager;
-import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityUser;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.DAO_Users;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.SessionManagement;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;

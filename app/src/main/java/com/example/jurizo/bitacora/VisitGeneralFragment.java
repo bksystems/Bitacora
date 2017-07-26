@@ -10,11 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
-import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DAOs.DAO_Oficinas;
-import com.example.jurizo.bitacora.Core.CoreBitacora.Database.DBHelper;
-import com.example.jurizo.bitacora.Core.CoreBitacora.Entity.EntityOficina;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.DAO_Oficinas;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityOficina;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
