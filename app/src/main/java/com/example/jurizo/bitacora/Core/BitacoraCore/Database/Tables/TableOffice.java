@@ -47,5 +47,5 @@ public class TableOffice {
             + Office_created
             + Office_modified + ")";
 
-    public static String OnDelete = "DROP TABLE IF EXISTS " + TableName + ";";
+    public static String onDelete = "DROP TABLE IF EXISTS " + TableName + ";";
 }

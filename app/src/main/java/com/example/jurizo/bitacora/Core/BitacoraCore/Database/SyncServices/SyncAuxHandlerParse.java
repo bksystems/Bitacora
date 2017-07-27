@@ -241,13 +241,5 @@ public class SyncAuxHandlerParse {
         return puestos;
     }
 
-    public static List<Office> Parse_Office(String jsonResponse) {
-        List<Office> offices = null;
-        try{
-            JSONObject jsonObj = new JSONObject(jsonResponse);
-        }catch (Exception ex){
-            Log.d(TAG, ex.getMessage());
-        }
-        return offices;
-    }
+
 }
