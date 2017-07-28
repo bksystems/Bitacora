@@ -6,17 +6,20 @@ package com.example.jurizo.bitacora.Core.BitacoraCore.Database.SyncServices;
 
 public class ConfigServerConnection {
 
-    private final static String hostname = "http://bitacoralym.esy.es"; //"http://192.168.100.20/BitacoraWS";
+    private final static String hostname = "http://192.168.100.20/Bitacora"; //"http://bitacoralym.esy.es"; //
     private final static String port = "";
-    private final static String pathSyncFiles = "/core/wservices_mobile/";
+    private final static String pathServices = "/ws/mobile/";
 
-    private final static String getURLOficinas = hostname + port + pathSyncFiles + "getOficinas.php";
-    private final static String getURLPuestos = hostname + port + pathSyncFiles + "getPuestos.php";
-    private final static String getURLAreas = hostname + port + pathSyncFiles + "getAreas.php";
-    private final static String getURLVisitas = hostname + port + pathSyncFiles + "getVisitas.php";
+    //Rutas para Users
+    private final static String URLLogin = hostname + port + pathServices +  "users/login.ini.php";
+
+    private final static String getURLOficinas = hostname + port + pathServices + "getOficinas.php";
+    private final static String getURLPuestos = hostname + port + pathServices + "getPuestos.php";
+    private final static String getURLAreas = hostname + port + pathServices + "getAreas.php";
+    private final static String getURLVisitas = hostname + port + pathServices + "getVisitas.php";
 
 
-    private final static String URLOffices = hostname + port + pathSyncFiles + "getVisitas.php";
+    private final static String URLOffices = hostname + port + pathServices + "getVisitas.php";
 
     public static String getHostname() {
         return hostname;
@@ -27,7 +30,7 @@ public class ConfigServerConnection {
     }
 
     public static String getPathSyncFiles() {
-        return pathSyncFiles;
+        return pathServices;
     }
 
     public static String getURLOficinas() {
@@ -48,5 +51,9 @@ public class ConfigServerConnection {
 
     public static String getURLOffices() {
         return URLOffices;
+    }
+
+    public static String URL_LoginValidate() {
+        return URLLogin;
     }
 }

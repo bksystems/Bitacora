@@ -5,7 +5,22 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableAnswersSegment;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableDepartment;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableEmployee;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableLogs;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableOffice;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TablePositionsEmployee;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableQuestionSegment;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableRol;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableSegment;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableStatusEmployee;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableStatusUser;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableUser;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.dbTableAreas;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.dbTableOficinas;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.dbTablePuestos;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.dbTableSync;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.dbTableUsers;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.dbTableVisits;
 
@@ -15,7 +30,7 @@ import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.dbTableVisi
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 7;
     public static final String DATABASE_NAME = "bitacora.db";
 
     public DBHelper(Context context) {
@@ -25,58 +40,30 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         if(db.isOpen()){
-            db.execSQL(dbTableOficinas.OnCreate);
-            db.execSQL(dbTableUsers.OnCreate);
-            db.execSQL(dbTableVisits.OnCreate);
-            insertDataTest(db);
+            db.execSQL(TableAnswersSegment.onCreate);
+            db.execSQL(TableDepartment.onCreate);
+            db.execSQL(TableEmployee.onCreate);
+            db.execSQL(TableLogs.onCreate);
+            db.execSQL(TableOffice.onCreate);
+            db.execSQL(TablePositionsEmployee.onCreate);
+            db.execSQL(TableQuestionSegment.onCreate);
+            db.execSQL(TableRol.onCreate);
+            db.execSQL(TableSegment.onCreate);
+            db.execSQL(TableStatusEmployee.onCreate);
+            db.execSQL(TableStatusUser.onCreate);
+            db.execSQL(TableUser.onCreate);
         }
     }
 
-    private void insertDataTest(SQLiteDatabase db) {
-        ContentValues values = new ContentValues();
-        values.put("fecha", "11/09/17"); // Shop Name
-        values.put("user_id", 1); // Shop Phone Number
-        values.put("oficina_id", 1); // Shop Phone Number
-        values.put("Isupdate", 0); // Shop Phone Number
-        values.put("status", 1); // Shop Phone Number
-        db.insert("Visitas", null, values);
-
-        ContentValues values1 = new ContentValues();
-        values1.put("fecha", "16/09/17"); // Shop Name
-        values1.put("user_id", 1); // Shop Phone Number
-        values1.put("oficina_id", 6); // Shop Phone Number
-        values1.put("Isupdate", 0); // Shop Phone Number
-        values1.put("status", 1); // Shop Phone Number
-        db.insert("Visitas", null, values1);
-
-        ContentValues values2 = new ContentValues();
-        values2.put("fecha", "23/09/17"); // Shop Name
-        values2.put("user_id", 1); // Shop Phone Number
-        values2.put("oficina_id", 19); // Shop Phone Number
-        values2.put("Isupdate", 0); // Shop Phone Number
-        values2.put("status", 0); // Shop Phone Number
-        db.insert("Visitas", null, values);
-
-        ContentValues values3 = new ContentValues();
-        values3.put("nomina", 37768);
-        values3.put("apellido_paterno", "Rizo");
-        values3.put("apellido_materno", "Flores");
-        values3.put("nombres", "Juan Carlos");
-        values3.put("email", "jurizo@compartamos.com");
-        values3.put("password", "empty");
-        values3.put("status", 1);
-        values3.put("id_jefe", 0);
-        values3.put("token", "empty");
-        values3.put("tokeFinish", "11/07/17");
-        db.insert("Users", null, values);
-
-        //db.close(); // Closing database connection
-    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(dbTableAreas.OnDelete);
         db.execSQL(dbTableOficinas.OnDelete);
+        db.execSQL(dbTablePuestos.OnDelete);
+        db.execSQL(dbTableSync.OnDelete);
         db.execSQL(dbTableUsers.OnDelete);
+        db.execSQL(dbTableVisits.OnDelete);
         db.execSQL(dbTableVisits.OnDelete);
         onCreate(db);
     }

@@ -42,12 +42,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (validate()) {
-                    String user_name = login_user_name.getText().toString();
-                    String user_password = Utils.EncryptPassword(login_user_password.getText().toString());
-                    String serialNumber = getSerialNumber();
+                    String username = login_user_name.getText().toString();
+                    String password = Utils.EncryptPassword(login_user_password.getText().toString());
+                    String access_type = "mobile";
+                    String access_system = "Android 6.0.1";
+                    String ip_address = "pending";
+                    String serial_number = getSerialNumber();
                     String imei = getIMEI();
+                    String sim_card_number = "pending";
+
                     LoginSync loginSync = new LoginSync(context);
-                    loginSync.execute(user_name, user_password, serialNumber, imei);
+                    loginSync.execute(username, password, access_type, access_system, ip_address, serial_number, imei, sim_card_number);
                 }
             }
         });

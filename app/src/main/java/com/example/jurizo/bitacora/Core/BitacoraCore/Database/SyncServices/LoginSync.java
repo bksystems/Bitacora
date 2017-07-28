@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.example.jurizo.bitacora.Core.BitacoraCore.Controllers.UserController;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.DAO_Areas;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.DAO_Oficinas;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.DAO_Puestos;
@@ -18,6 +19,7 @@ import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityOficina;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityPuesto;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityUser;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityVisita;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Models.User;
 import com.example.jurizo.bitacora.PrincipalActivity;
 
 import java.io.BufferedReader;
@@ -59,11 +61,34 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
 
     @Override
     protected EntityUser doInBackground(String... params) {
+
+        String username = params[0];
+        String password = params[1];
+        String access_type = params[1];
+        String access_system = params[2];
+        String ip_address = params[3];
+        String serial_number = params[4];
+        String imei = params[5];
+        String sim_card_number = params[6];
+
         progressDialog.setCancelable(true);
+        publishProgress("Validando credenciales ingresadas..");
+        UserController usrController = new UserController(context);
+        //Primero validamos si ya se encuentra registrado
+        User usr = usrController.UserValidateOffLine(username, password);
+        if(usr == null) {
+            usr = usrController.UserValidateOnLine(username, password, access_type, access_system, ip_address, serial_number, imei, sim_card_number);
+        }
+
+
+
+
+
+
         publishProgress("Validando usuario");
         String strUrlLogin = hostname + port + pathSyncFiles + "login.ini.php";
         try {
-            String username = params[0];
+            //String username = params[0];
             String userpassword = params[1];
             String deviceSerie = params[2];
             String devicesImei = params[3];
