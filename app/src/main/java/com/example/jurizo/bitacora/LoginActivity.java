@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-    private static final int test_update = 1;
+
     private Context context;
 
     @InjectView(R.id.login_user_name) EditText login_user_name;
