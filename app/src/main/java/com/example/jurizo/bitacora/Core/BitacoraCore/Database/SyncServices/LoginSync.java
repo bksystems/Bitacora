@@ -5,7 +5,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
+import com.example.jurizo.bitacora.Core.BitacoraCore.Controllers.AnswersSegmentController;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Controllers.DepartmentController;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Controllers.OfficesController;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Controllers.QuestionSegmentController;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Controllers.SegmentController;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Controllers.UserController;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.DAO_Areas;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.DAO_Oficinas;
@@ -14,6 +20,7 @@ import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.DAO_Users;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.DAO_Visits;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DBHelper;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.SessionManagement;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableAnswersSegment;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityArea;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityOficina;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityPuesto;
@@ -42,7 +49,7 @@ import java.util.List;
  * Created by Carlos Rizo on 26/06/2017.
  */
 
-public class LoginSync extends AsyncTask<String, String, EntityUser>{
+public class LoginSync extends AsyncTask<String, String, User> {
 
     private String TAG = SyncManager.class.getSimpleName();
     private Context context;
@@ -55,273 +62,80 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
     private DBHelper dbHelper;
     private AlertDialog alertDialog;
 
-    public LoginSync(Context context){
+    public LoginSync(Context context) {
         this.context = context;
     }
 
     @Override
-    protected EntityUser doInBackground(String... params) {
-
-        String username = params[0];
-        String password = params[1];
-        String access_type = params[1];
-        String access_system = params[2];
-        String ip_address = params[3];
-        String serial_number = params[4];
-        String imei = params[5];
-        String sim_card_number = params[6];
-
-        progressDialog.setCancelable(true);
-        publishProgress("Validando credenciales ingresadas..");
-        UserController usrController = new UserController(context);
-        //Primero validamos si ya se encuentra registrado
-        User usr = usrController.UserValidateOffLine(username, password);
-        if(usr == null) {
-            usr = usrController.UserValidateOnLine(username, password, access_type, access_system, ip_address, serial_number, imei, sim_card_number);
-        }
-
-
-
-
-
-
-        publishProgress("Validando usuario");
-        String strUrlLogin = hostname + port + pathSyncFiles + "login.ini.php";
+    protected User doInBackground(String... params) {
         try {
-            //String username = params[0];
-            String userpassword = params[1];
-            String deviceSerie = params[2];
-            String devicesImei = params[3];
+            String username = params[0];
+            String password = params[1];
+            String access_type = params[1];
+            String access_system = params[2];
+            String ip_address = params[3];
+            String serial_number = params[4];
+            String imei = params[5];
+            String sim_card_number = params[6];
 
-            EntityUser user = LoginValidate(strUrlLogin, username, userpassword, deviceSerie, devicesImei);
+            progressDialog.setCancelable(true);
+            publishProgress("Validando credenciales ingresadas..");
+            UserController usrController = new UserController(context);
+            //Primero validamos si ya se encuentra registrado
+            User usr = usrController.UserValidateOffLine(username, password);
+            if (usr == null) {
+                usr = usrController.UserValidateOnLine(username, password, access_type, access_system, ip_address, serial_number, imei, sim_card_number);
+                if (usr != null) {
+                    publishProgress("Descargando catalogos principales, (Departamentos)...");
+                    DepartmentController departmentController = new DepartmentController(context);
+                    departmentController.Download_Update_Department(usr.getUsername());
+                    publishProgress("Descargando catalogos principales, (Segmentos)...");
+                    SegmentController segmentController = new SegmentController(context);
+                    segmentController.Download_Update_Segments(usr.getUsername());
+                    publishProgress("Descargando catalogos principales, (Preguntas)...");
+                    QuestionSegmentController questionsegmentController = new QuestionSegmentController(context);
+                    questionsegmentController.Download_Update_Questions(usr.getUsername());
+                    publishProgress("Descargando catalogos principales, (Respuestas)...");
+                    AnswersSegmentController answersSegmentController = new AnswersSegmentController(context);
+                    answersSegmentController.Download_Update_Answers(usr.getUsername());
+                    publishProgress("Descargando catalogos principales, (Oficinas)...");
+                    OfficesController officesController = new OfficesController(context);
+                    officesController.Download_Update_Offices(usr.getUsername());
 
-            if(user != null && user.getId_status() > 0){
-                HttpHandler httpHandler = new HttpHandler();
-                publishProgress("Descargando catalogo de oficinas");
-                String jsonOficinas = httpHandler.makeServicesCall(ConfigServerConnection.getURLOficinas());
-                publishProgress("Descargando catalogo de puestos");
-                String jsonPuestos = httpHandler.makeServicesCall(ConfigServerConnection.getURLPuestos());
-                publishProgress("Descargando catalogo de areas");
-                String jsonAreas = httpHandler.makeServicesCall(ConfigServerConnection.getURLAreas());
-
-                List<EntityOficina> oficinas = SyncAuxHandlerParse.OficinasJSONParse(jsonOficinas);
-                List<EntityPuesto> puestos = SyncAuxHandlerParse.PuestosJSONParse(jsonPuestos);
-                List<EntityArea> areas = SyncAuxHandlerParse.AreasJSONParse(jsonAreas);
-
-                if(oficinas.size() > 0 && puestos.size() > 0 && areas.size() > 0){
-
-                    DAO_Oficinas daoOficinas = new DAO_Oficinas(context);
-                    DAO_Puestos daoPuestos = new DAO_Puestos(context);
-                    DAO_Areas daoAreas = new DAO_Areas(context);
-
-                    if(daoOficinas.getCount() < oficinas.size()) {
-                        publishProgress("Actualizando catalogo de oficinas");
-                        daoOficinas.updateOficinas(oficinas);
+                /*publishProgress("Actualizando información de usuarios");
+                List<EntityUser> users = new ArrayList<>();
+                users.add(user);
+                int consecutivo = 0;
+                while (consecutivo < users.size()) {
+                    int usrId = users.get(consecutivo).getId();
+                    List<EntityUser> usrAsignated = getUserAsignated(usrId);
+                    if (usrAsignated != null && usrAsignated.size() > 0) {
+                        users.addAll(usrAsignated);
                     }
-
-                    publishProgress("Actualizando catalogo de puestos");
-                    daoPuestos.updatePuestos(puestos);
-
-                    publishProgress("Actualizando catalogo de areas");
-                    daoAreas.updateAreas(areas);
-
-                    publishProgress("Actualizando información de usuarios");
-                    List<EntityUser> users = new ArrayList<>();
-                    users.add(user);
-                    int consecutivo = 0;
-                    while (consecutivo < users.size()){
-                        int usrId = users.get(consecutivo).getId();
-                        List<EntityUser> usrAsignated = getUserAsignated(usrId);
-                        if(usrAsignated != null && usrAsignated.size() > 0) {
-                            users.addAll(usrAsignated);
-                        }
-                        consecutivo++;
-                    }
-                    DAO_Users daoUsers = new DAO_Users(context);
-                    daoUsers.insertUsers(users);
-
-
-                    publishProgress("Descargando visitas guardas en sistema");
-                    List<EntityVisita> visitas = getVisitasServer(ConfigServerConnection.getURLVisitas(), users);
-                    if(visitas != null && visitas.size() > 0) {
-                        publishProgress("Procesando visitas..");
-                        DAO_Visits dao_visits = new DAO_Visits(context);
-                        dao_visits.insertVisitas(visitas);
-                    }
+                    consecutivo++;
                 }
-            }
+                DAO_Users daoUsers = new DAO_Users(context);
+                daoUsers.insertUsers(users);
 
-            return user;
+
+                publishProgress("Descargando visitas guardas en sistema");
+                List<EntityVisita> visitas = getVisitasServer(ConfigServerConnection.getURLVisitas(), users);
+                if (visitas != null && visitas.size() > 0) {
+                    publishProgress("Procesando visitas..");
+                    DAO_Visits dao_visits = new DAO_Visits(context);
+                    dao_visits.insertVisitas(visitas);
+                }*/
+                }
+
+
+                return usr;
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return null;
     }
 
-    private List<EntityVisita> getVisitasServer(String strUrlVisitas, List<EntityUser> usersAsignated) {
-        List<EntityVisita> visitas = null;
-        String user_query = "";
-        int contador = 0;
-        for (EntityUser usr: usersAsignated) {
-            user_query += " user_id = " + usr.getId();
-            if(usersAsignated.size() > 1 && contador < usersAsignated.size() - 1){
-                user_query += " or ";
-            }
-            contador++;
-        }
-
-        String strUrl = strUrlVisitas;
-
-        try {
-            URL url = new URL(strUrl);
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setDoOutput(true);
-            httpURLConnection.setDoInput(true);
-            OutputStream outputStream = httpURLConnection.getOutputStream();
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-            String post_data = URLEncoder.encode("users_id", "UTF-8") + "=" + URLEncoder.encode(user_query, "UTF-8");
-            bufferedWriter.write(post_data);
-            bufferedWriter.flush();
-            bufferedWriter.close();
-            outputStream.close();
-            InputStream inputStream = httpURLConnection.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-            String result = "";
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                result += line;
-            }
-            bufferedReader.close();
-            inputStream.close();
-
-            visitas = SyncAuxHandlerParse.VisitasJSONParse(result);
-
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return  visitas;
-    }
-
-    private List<EntityUser> getUserAsignated(int userId) {
-        List<EntityUser> users = null;
-
-        String strUrl = hostname + port + pathSyncFiles + "getUsers.php";
-
-        try {
-            URL url = new URL(strUrl);
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setDoOutput(true);
-            httpURLConnection.setDoInput(true);
-            OutputStream outputStream = httpURLConnection.getOutputStream();
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-            String post_data = URLEncoder.encode("id_jefe", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(userId), "UTF-8");
-            bufferedWriter.write(post_data);
-            bufferedWriter.flush();
-            bufferedWriter.close();
-            outputStream.close();
-            InputStream inputStream = httpURLConnection.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-            String result = "";
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                result += line;
-            }
-            bufferedReader.close();
-            inputStream.close();
-
-            users = SyncAuxHandlerParse.UserJSONParse(result);
-
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return  users;
-    }
-
-    private EntityUser LoginValidate(String strUrl, String username, String userpassword, String deviceSerie, String devicesImei) {
-        EntityUser user = null;
-        user = validateInDataBase(username, userpassword);
-        if(user == null || user.getId_status() == 0 || tokenIsValid(user) == false){
-            user = validateInServer(strUrl, username, userpassword, deviceSerie, devicesImei);
-        }
-        return  user;
-    }
-
-    private boolean tokenIsValid(EntityUser user) {
-        boolean result = false;
-        try {
-            String token = user.getToken();
-            String tokenFinish = user.getTokenFinish();
-            Calendar calander = Calendar.getInstance();
-            int cDay = calander.get(Calendar.DAY_OF_MONTH);
-            int cMonth = calander.get(Calendar.MONTH) + 1;
-            int cYear = calander.get(Calendar.YEAR);
-            Date dateNow = new Date(cYear, cMonth, cDay);
-            int tDay = Integer.parseInt(tokenFinish.split("-")[2]);
-            int tMont = Integer.parseInt(tokenFinish.split("-")[1]);
-            int tYear = Integer.parseInt(tokenFinish.split("-")[0]);
-            Date dateFinish = new Date(tYear, tMont, tDay);
-            if (dateFinish.after(dateNow)) {
-                result = true;
-            }
-        }catch (Exception ex){
-            result = false;
-        }
-        return result;
-    }
-
-    private EntityUser validateInDataBase(String username, String userpassword) {
-        EntityUser user = null;
-        DAO_Users dao_users = new DAO_Users(context);
-        user = dao_users.loginValidate(username, userpassword);
-        return user;
-    }
-
-    private EntityUser validateInServer(String strUrl, String username, String userpassword, String deviceSerie, String devicesImei) {
-        EntityUser user = null;
-        try {
-            DAO_Visits daoVisitas = new DAO_Visits(context);
-            daoVisitas.clear();
-
-            URL url = new URL(strUrl);
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setDoOutput(true);
-            httpURLConnection.setDoInput(true);
-            OutputStream outputStream = httpURLConnection.getOutputStream();
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-            String post_data = URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(username, "UTF-8") + "&"
-                    + URLEncoder.encode("userpassword", "UTF-8") + "=" + URLEncoder.encode(userpassword, "UTF-8") + "&"
-                    + URLEncoder.encode("devicesSerie", "UTF-8") + "=" + URLEncoder.encode(deviceSerie, "UTF-8") + "&"
-                    + URLEncoder.encode("devicesImei", "UTF-8") + "=" + URLEncoder.encode(devicesImei, "UTF-8");
-            bufferedWriter.write(post_data);
-            bufferedWriter.flush();
-            bufferedWriter.close();
-            outputStream.close();
-            InputStream inputStream = httpURLConnection.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-            String result = "";
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                result += line;
-            }
-            bufferedReader.close();
-            inputStream.close();
-
-            user = SyncAuxHandlerParse.UserLoginJsonParse(result);
-
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return user;
-    }
 
     @Override
     protected void onPreExecute() {
@@ -337,19 +151,19 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
     }
 
     @Override
-    protected void onPostExecute(EntityUser user) {
+    protected void onPostExecute(User user) {
         super.onPostExecute(user);
         progressDialog.cancel();
 
-        if(user != null){
-            switch (user.getId_status()){
+        if (user != null) {
+            switch (user.getStatus_user_id()) {
                 case 0:
                     alertDialog.setMessage("Usuario bloqueado");
                     alertDialog.show();
                     break;
                 case 1:
                     SessionManagement session = new SessionManagement(context);
-                    session.createLoginSession(String.valueOf(user.getId()), String.valueOf(user.getNomina()), user.getApellido_paterno() + " " + user.getApellido_materno() + " "+ user.getNombres());
+                    session.createLoginSession(String.valueOf(user.getId()), String.valueOf(user.getId()), user.getUsername());
                     Intent intent = new Intent(context, PrincipalActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.addCategory(Intent.CATEGORY_HOME);
@@ -359,9 +173,10 @@ public class LoginSync extends AsyncTask<String, String, EntityUser>{
 
 
             }
-        }else {
-            alertDialog.setMessage("Usuario o contraseña incorrecta");
-            alertDialog.show();
+        } else {
+            //alertDialog.setMessage("Usuario o contraseña incorrecta");
+            //alertDialog.show();
+            Toast.makeText(context, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
         }
     }
 
