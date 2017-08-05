@@ -22,15 +22,10 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.jurizo.bitacora.Controls.AdapterListViewVisit;
 import com.example.jurizo.bitacora.Controls.AdapterSpinnerCustom;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.database.SessionManagement;
-import com.example.jurizo.bitacora.CoreBitacoraMVA.database.SynchronizationService.SyncManager;
-import com.example.jurizo.bitacora.Core.Core.Entity.EntityArea;
-import com.example.jurizo.bitacora.Core.Core.Entity.EntityPuesto;
-import com.example.jurizo.bitacora.Core.Core.Entity.EntityUser;
-import com.example.jurizo.bitacora.Core.Core.Entity.EntityVisita;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+
 
 public class PrincipalActivity extends AppCompatActivity {
 
@@ -50,7 +45,7 @@ public class PrincipalActivity extends AppCompatActivity {
 
 
     private void loadUsers() {
-        List<EntityUser> getUsersFilters = new ArrayList<>();
+        /*List<EntityUser> getUsersFilters = new ArrayList<>();
         DAO_Users dao_users = new DAO_Users(context);
         List<EntityUser> users = dao_users.getUsers();
         if(users.size() > 1){
@@ -81,7 +76,7 @@ public class PrincipalActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });
+        });*/
     }
 
     private void setToolbar() {
@@ -95,7 +90,7 @@ public class PrincipalActivity extends AppCompatActivity {
     }
 
     private void loadVisitas(int idUser) {
-       lstView = (SwipeMenuListView) findViewById(R.id.visit_lst_visitas);
+       /*lstView = (SwipeMenuListView) findViewById(R.id.visit_lst_visitas);
         DAO_Visits dao_visits = new DAO_Visits(context);
         List<EntityVisita> arrayVisit = null;
         if(idUser <= 0){
@@ -142,7 +137,7 @@ public class PrincipalActivity extends AppCompatActivity {
                 }
                 return false;
             }
-        });
+        });*/
     }
 
     @Override
@@ -167,8 +162,8 @@ public class PrincipalActivity extends AppCompatActivity {
                 sessionManagement.logoutUser();
                 return true;
             case R.id.action_sync:
-                SyncManager syncManager = new SyncManager(context);
-                syncManager.execute();
+                /*SyncManager syncManager = new SyncManager(context);
+                syncManager.execute();*/
                 return true;
             case R.id.action_options:
                 Intent intentSettings = new Intent(PrincipalActivity.this, SettingsActivity.class);

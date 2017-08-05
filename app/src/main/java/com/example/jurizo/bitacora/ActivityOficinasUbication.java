@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.jurizo.bitacora.Core.Core.Entity.EntityOficina;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -140,7 +139,7 @@ public class ActivityOficinasUbication extends AppCompatActivity
 
         @Override
         protected Void doInBackground(String... params) {
-            DAO_Oficinas daoOficinas = new DAO_Oficinas(context);
+           /* DAO_Oficinas daoOficinas = new DAO_Oficinas(context);
             List<EntityOficina> oficinas = daoOficinas.getOficinas();
             markersArray = new ArrayList<>();
 
@@ -150,7 +149,7 @@ public class ActivityOficinasUbication extends AppCompatActivity
                         .anchor(0.5f, 0.5f)
                         .title(os.getCc() + "-" + os.getOficina())
                         .snippet(os.getRegion()));
-            }
+            }*/
             return null;
         }
 

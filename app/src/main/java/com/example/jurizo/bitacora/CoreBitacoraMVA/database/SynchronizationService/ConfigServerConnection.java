@@ -38,4 +38,8 @@ public class ConfigServerConnection {
     public static String getURLDepartmanets() {
         return URLGetDepartments;
     }
+
+    public static String getURLOffices() {
+        return URLGetOffices;
+    }
 }

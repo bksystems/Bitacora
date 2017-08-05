@@ -53,14 +53,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(dbTableAreas.OnDelete);
-        db.execSQL(dbTableOficinas.OnDelete);
-        db.execSQL(dbTablePuestos.OnDelete);
-        db.execSQL(dbTableSync.OnDelete);
-        db.execSQL(dbTableUsers.OnDelete);
-        db.execSQL(dbTableVisits.OnDelete);
-        db.execSQL(dbTableVisits.OnDelete);
-
         db.execSQL(TableAnswersSegment.onDelete);
         db.execSQL(TableDepartment.onDelete);
         db.execSQL(TableEmployee.onDelete);

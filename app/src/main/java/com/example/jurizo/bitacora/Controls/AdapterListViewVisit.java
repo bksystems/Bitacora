@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.jurizo.bitacora.Core.Core.Entity.EntityVisita;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.models.Visit;
 import com.example.jurizo.bitacora.R;
 
 import java.util.List;
@@ -18,12 +18,12 @@ import java.util.List;
  * Created by jurizo on 30/06/17.
  */
 
-public class AdapterListViewVisit extends ArrayAdapter<EntityVisita> {
+public class AdapterListViewVisit extends ArrayAdapter<Visit> {
     int groupid;
     LayoutInflater inflater;
-    List<EntityVisita> list;
+    List<Visit> list;
 
-    public AdapterListViewVisit(Activity context, int groupid, int id, List<EntityVisita> list){
+    public AdapterListViewVisit(Activity context, int groupid, int id, List<Visit> list){
         super(context, id, list);
         this.list = list;
         this.groupid = groupid;
@@ -42,7 +42,7 @@ public class AdapterListViewVisit extends ArrayAdapter<EntityVisita> {
 
         idVisit.setText(String.valueOf(list.get(position)));
 
-        String userName = list.get(position).getUser().getApellido_paterno() + " " + list.get(position).getUser().getApellido_materno() + " " + list.get(position).getUser().getNombres();
+        /*String userName = list.get(position).getUser().getApellido_paterno() + " " + list.get(position).getUser().getApellido_materno() + " " + list.get(position).getUser().getNombres();
         txtUserExcecute.setText(userName);
 
         String oficinaVisit = String.valueOf(list.get(position).getOficina().getCc()) + " - " + list.get(position).getOficina().getOficina();
@@ -55,7 +55,7 @@ public class AdapterListViewVisit extends ArrayAdapter<EntityVisita> {
             imageViewStatus.setImageResource(R.drawable.ic_green_point);
         }
 
-        txtFecha.setText(list.get(position).getFecha());
+        txtFecha.setText(list.get(position).getFecha());*/
 
         return itemView;
     }

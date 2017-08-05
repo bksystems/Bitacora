@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.jurizo.bitacora.CoreBitacoraMVA.database.DBHelper;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.database.tables.TableLogs;
 
 /**
  * Created by jurizo on 26/07/17.
@@ -30,7 +31,7 @@ public class LogsDAO {
         values.put("datetime", "");
         values.put("isLoad", 0);
         if (db.isOpen()) {
-            db.insert(dbTableOficinas.TableName, null, values);
+            db.insert(TableLogs.TableName, null, values);
         }
     }
 }

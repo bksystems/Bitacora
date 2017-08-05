@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jurizo.bitacora.CoreBitacoraMVA.database.SessionManagement;
-import com.example.jurizo.bitacora.Core.Core.Entity.EntityUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -190,7 +189,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void LoadUserSetings() {
-        SessionManagement sessionManagement = new SessionManagement(context);
+        /*SessionManagement sessionManagement = new SessionManagement(context);
         HashMap<String, String> usr = sessionManagement.getUserDetails();
         String user_id = usr.get("user_id");
         DAO_Users daoUsers = new DAO_Users(context);
@@ -222,7 +221,7 @@ public class SettingsActivity extends AppCompatActivity {
                     android.R.layout.simple_list_item_1,
                     colDependientes );
             listViewColDependientes.setAdapter(arrayAdapter);
-        }
+        }*/
     }
 
     @Override

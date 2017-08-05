@@ -26,7 +26,7 @@ import com.example.jurizo.bitacora.PrincipalActivity;
 
 public class LoginSync extends AsyncTask<String, String, User> {
 
-    private String TAG = SyncManager.class.getSimpleName();
+    private String TAG = getClass().getSimpleName();
     private Context context;
     private ProgressDialog progressDialog;
 

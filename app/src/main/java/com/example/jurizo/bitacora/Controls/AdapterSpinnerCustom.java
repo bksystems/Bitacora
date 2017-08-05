@@ -6,8 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import com.example.jurizo.bitacora.Core.Core.Entity.EntityUser;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.models.Employee;
 import com.example.jurizo.bitacora.R;
 
 import java.util.List;
@@ -19,21 +18,21 @@ import java.util.List;
 public class AdapterSpinnerCustom extends BaseAdapter {
 
     private final LayoutInflater inflater;
-    private final List<EntityUser> users;
+    private final List<Employee> employees;
 
-    public AdapterSpinnerCustom(Context context, List<EntityUser> users){
+    public AdapterSpinnerCustom(Context context, List<Employee> employees){
         inflater = LayoutInflater.from(context);
-        this.users = users;
+        this.employees = employees;
     }
 
     @Override
     public int getCount() {
-        return users.size();
+        return employees.size();
     }
 
     @Override
-    public EntityUser getItem(int position) {
-        return users.get(position);
+    public Employee getItem(int position) {
+        return employees.get(position);
     }
 
     @Override
@@ -48,15 +47,18 @@ public class AdapterSpinnerCustom extends BaseAdapter {
         TextView userId = (TextView)convertView.findViewById(R.id.custom_spinner_id);
         TextView userPuesto = (TextView) convertView.findViewById(R.id.custom_spinner_puesto);
         TextView userArea = (TextView) convertView.findViewById(R.id.custom_spinner_area);
-        String nomina = "";
+        String roster = "";
         String puesto = "";
         String area = "";
-        if(users.get(position).getId() > 0 || users.get(position).getNomina() > 0) {
-            nomina = String.valueOf(users.get(position).getNomina()) + " - " ;
-            puesto = users.get(position).getPuesto().getPuesto();
-            area = users.get(position).getArea().getArea();
+        if(employees.get(position).getId() > 0 || employees.get(position).getRoster() > 0) {
+            roster = String.valueOf(employees.get(position).getRoster()) + " - " ;
+            //puesto = users.get(position).getPuesto().getPuesto();
+            //area = users.get(position).getArea().getArea();
         }
-        userName.setText(nomina + users.get(position).getApellido_paterno() + " " + users.get(position).getApellido_materno() + " " + users.get(position).getNombres());
+        userName.setText(roster
+                + employees.get(position).getFirst_lastname() + " "
+                + employees.get(position).getSecond_lastname() + " "
+                + employees.get(position).getNames());
         userPuesto.setText(puesto);
         userArea.setText(area);
 
