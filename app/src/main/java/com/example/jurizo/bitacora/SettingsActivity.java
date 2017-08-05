@@ -20,9 +20,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.DAO_Users;
-import com.example.jurizo.bitacora.Core.BitacoraCore.Database.SessionManagement;
-import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityUser;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.database.SessionManagement;
+import com.example.jurizo.bitacora.Core.Core.Entity.EntityUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;

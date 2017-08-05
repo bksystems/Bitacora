@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.jurizo.bitacora.Core.BitacoraCore.Controls.Utils;
-import com.example.jurizo.bitacora.Core.BitacoraCore.Database.SyncServices.LoginSync;
+import com.example.jurizo.bitacora.Controls.Utils;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.database.SynchronizationService.LoginSync;
 
 import java.lang.reflect.Method;
 

@@ -18,8 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.DAO_Oficinas;
-import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityOficina;
+import com.example.jurizo.bitacora.Core.Core.Entity.EntityOficina;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
