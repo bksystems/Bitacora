@@ -14,6 +14,7 @@ import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TablePositi
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableQuestionSegment;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableRol;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableSegment;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableSessions;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableStatusEmployee;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableStatusUser;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableUser;
@@ -30,7 +31,7 @@ import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.dbTableVisi
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
     public static final String DATABASE_NAME = "bitacora.db";
 
     public DBHelper(Context context) {
@@ -52,6 +53,7 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL(TableStatusEmployee.onCreate);
             db.execSQL(TableStatusUser.onCreate);
             db.execSQL(TableUser.onCreate);
+            db.execSQL(TableSessions.onCreate);
         }
     }
 
@@ -65,17 +67,22 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(dbTableUsers.OnDelete);
         db.execSQL(dbTableVisits.OnDelete);
         db.execSQL(dbTableVisits.OnDelete);
+
+        db.execSQL(TableAnswersSegment.onDelete);
+        db.execSQL(TableDepartment.onDelete);
+        db.execSQL(TableEmployee.onDelete);
+        db.execSQL(TableLogs.onDelete);
+        db.execSQL(TableOffice.onDelete);
+        db.execSQL(TablePositionsEmployee.onDelete);
+        db.execSQL(TableQuestionSegment.onDelete);
+        db.execSQL(TableRol.onDelete);
+        db.execSQL(TableSegment.onDelete);
+        db.execSQL(TableStatusEmployee.onDelete);
+        db.execSQL(TableStatusUser.onDelete);
+        db.execSQL(TableUser.onDelete);
+        db.execSQL(TableSessions.onDelete);
+
         onCreate(db);
     }
-
-    @Override
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        super.onDowngrade(db, oldVersion, newVersion);
-        db.execSQL(dbTableOficinas.OnDelete);
-        db.execSQL(dbTableUsers.OnDelete);
-        db.execSQL(dbTableVisits.OnDelete);
-        onCreate(db);
-    }
-
 
 }

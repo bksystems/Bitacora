@@ -4,12 +4,15 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.LogsDAO;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.SessionDAO;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.UserDAO;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.SyncServices.ConfigServerConnection;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.SyncServices.SyncAuxHandlerParse;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityArea;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityPuesto;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityUser;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Models.Employee;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Models.Session;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Models.User;
 
 import org.json.JSONArray;
@@ -92,15 +95,70 @@ public class UserController {
 
     private User JSON_Parse_Office(String JSONresult) {
         User user = null;
+        Session session = null;
         try {
-            JSONObject jsonObje = new JSONObject(JSONresult);
+            JSONObject jsonObj = new JSONObject(JSONresult);
+            JSONArray jsonUserData = jsonObj.getJSONArray("data");
+            if (jsonUserData.length() > 0) {
+                for (int i = 0; i < jsonUserData.length(); i++) {
+                    JSONObject itemObj = jsonUserData.getJSONObject(i);
+                    boolean result = itemObj.getBoolean("success");
+                    if(result) {
+                        JSONArray jsonUserUser = itemObj.getJSONArray("user");
+                        for(int j = 0; j < jsonUserUser.length(); j++){
+                            JSONObject itemObjUser = jsonUserUser.getJSONObject(j);
+                            int user_id = itemObjUser.getInt("id");
+                            int user_employe_id = itemObjUser.getInt("employee_id");
+                            String user_username = itemObjUser.getString("username");
+                            String user_password = itemObjUser.getString("password");
+                            int user_status_user_id = itemObjUser.getInt("status_user_id");
+                            int user_rol_id = itemObjUser.getInt("rol_id");
+                            user = new User(user_id, user_employe_id, user_username, user_password, user_status_user_id, user_rol_id, "", "");
+                        }
+                        JSONArray jsonUserSession = itemObj.getJSONArray("session");
+                        for(int s = 0; s < jsonUserSession.length(); s++){
+                            JSONObject itemObjSession = jsonUserSession.getJSONObject(s);
+                            int session_id = itemObjSession.getInt("id");
+                            int session_user_id = itemObjSession.getInt("user_id");
+                            String session_tocken = itemObjSession.getString("tocken");
+                            String session_tocken_finish = itemObjSession.getString("finish_tocken");
+                            session = new Session(session_id, session_user_id, session_tocken, session_tocken_finish);
+                            if(session != null){
+                                SessionController sessionController = new SessionController(context);
+                                if(!sessionController.update_session_database(session)){
+                                    user = null;
+                                }else{
+                                    UserController userController = new UserController(context);
+                                    userController.update_user_database(user);
+                                }
+                            }
+                        }
+                        /*JSONArray jsonUserPermission = itemObj.getJSONArray("permissions");
+                        for(int p = 0; p < jsonUserPermission.length(); p++){
 
-            JSONArray jsonUserLogin = jsonObje.getJSONArray("user");
+                        }*/
 
-            if (jsonUserLogin.length() > 0) {
-
-
-
+                        /*JSONArray jsonUserEmployee = itemObj.getJSONArray("employees");
+                        for (int e = 0; e < jsonUserEmployee.length(); e++){
+                            JSONObject itemObjEmployee = jsonUserEmployee.getJSONObject(e);
+                            int e_id = itemObjEmployee.getInt("id");
+                            int e_roster = itemObjEmployee.getInt("roster");
+                            String e_firs_lastname = itemObjEmployee.getString("first_lastname");
+                            String e_second_lastname = itemObjEmployee.getString("second_lastanme");
+                            String e_names = itemObjEmployee.getString("names");
+                            String e_email = itemObjEmployee.getString("email");
+                            int e_department_id = itemObjEmployee.getInt("department_id");
+                            int e_position_employee_id = itemObjEmployee.getInt("e_position_employee_id");
+                            int e_status_employee_id = itemObjEmployee.getInt("status_employee_id");
+                            int e_employee_id = itemObjEmployee.getInt("employee_id");
+                            String e_created = "";
+                            String e_modified = "";
+                            employee = new Employee(e_id, e_roster, e_firs_lastname, e_second_lastname, e_names, e_email, e_department_id, e_position_employee_id, e_status_employee_id, e_employee_id, e_created, e_modified);
+                        }*/
+                    }else{
+                        user = null;
+                    }
+                }
             } else {
                 user = null;
             }
@@ -108,6 +166,11 @@ public class UserController {
             Log.e("ParseLogin", "Json parsing error: " + e.getMessage());
         }
         return user;
+    }
+
+    private boolean update_user_database(User user) {
+        UserDAO userDAO = new UserDAO(context);
+        return userDAO.update_user_database(user);
     }
 
     public User UserValidateOffLine(String username, String password) {

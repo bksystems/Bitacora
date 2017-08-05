@@ -23,5 +23,5 @@ public class TableLogs {
             + Logs_datetime
             + Logs_isLoad + ")";
 
-    public static String OnDelete = "DROP TABLE IF EXISTS " + TableName + ";";
+    public static String onDelete = "DROP TABLE IF EXISTS " + TableName + ";";
 }

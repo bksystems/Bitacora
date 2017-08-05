@@ -1,11 +1,13 @@
 package com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DBHelper;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Database.Tables.TableUser;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityArea;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityPuesto;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityUser;
@@ -51,5 +53,39 @@ public class UserDAO {
             LogsDAO logs = new LogsDAO(TAG, TAGClass, ex.getMessage(), context);
         }
         return user;
+    }
+
+    public boolean update_user_database(User user) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        boolean result = false;
+        try {
+            db.execSQL("DROP TABLE IF EXISTS " + TableUser.TableName);
+            db.execSQL(TableUser.onCreate);
+            if (db != null) {
+                ContentValues values = new ContentValues();
+                values.put("id", user.getId());
+                values.put("employee_id", user.getEmployee_id());
+                values.put("username", user.getUsername());
+                values.put("password", user.getPassword());
+                values.put("status_user_id", user.getStatus_user_id());
+                values.put("rol_id", user.getRol_id());
+                values.put("created", user.getCreated());
+                values.put("modified", user.getModified());
+
+                int count = 0;
+                if (db.isOpen()) {
+                    count = (int) db.insert(TableUser.TableName, null, values);
+                }
+                if(count > 0) {
+                    result = true;
+                }
+
+            }
+        }catch (Exception ex){
+            result = false;
+            Log.d(TAG, ex.getMessage());
+            LogsDAO logs = new LogsDAO(TAG, TAGClass, ex.getMessage(), context);
+        }
+        return result;
     }
 }

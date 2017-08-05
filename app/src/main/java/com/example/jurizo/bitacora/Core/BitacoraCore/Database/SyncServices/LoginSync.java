@@ -12,6 +12,7 @@ import com.example.jurizo.bitacora.Core.BitacoraCore.Controllers.DepartmentContr
 import com.example.jurizo.bitacora.Core.BitacoraCore.Controllers.OfficesController;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Controllers.QuestionSegmentController;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Controllers.SegmentController;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Controllers.SessionController;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Controllers.UserController;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.DAO_Areas;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Database.DAOs.DAO_Oficinas;
@@ -26,6 +27,7 @@ import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityOficina;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityPuesto;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityUser;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Entity.EntityVisita;
+import com.example.jurizo.bitacora.Core.BitacoraCore.Models.Session;
 import com.example.jurizo.bitacora.Core.BitacoraCore.Models.User;
 import com.example.jurizo.bitacora.PrincipalActivity;
 
@@ -86,6 +88,9 @@ public class LoginSync extends AsyncTask<String, String, User> {
             if (usr == null) {
                 usr = usrController.UserValidateOnLine(username, password, access_type, access_system, ip_address, serial_number, imei, sim_card_number);
                 if (usr != null) {
+                    publishProgress("Validando sesión activa..");
+                    SessionController sessionController = new SessionController(context);
+                    Session session = sessionController.get_Final_Session(usr.getId());
                     publishProgress("Descargando catalogos principales, (Departamentos)...");
                     DepartmentController departmentController = new DepartmentController(context);
                     departmentController.Download_Update_Department(usr.getUsername());

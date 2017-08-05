@@ -29,7 +29,7 @@ public class HttpHandler {
         try{
             URL url = new URL(reqUrl);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.setRequestMethod("POST");
 
             InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
             response = convertStreamToString(inputStream);
