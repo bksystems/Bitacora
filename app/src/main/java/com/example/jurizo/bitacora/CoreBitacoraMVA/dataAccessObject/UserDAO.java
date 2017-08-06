@@ -1,4 +1,4 @@
-package com.example.jurizo.bitacora.CoreBitacoraMVA.dataAccessLayer;
+package com.example.jurizo.bitacora.CoreBitacoraMVA.dataAccessObject;
 
 import android.content.ContentValues;
 import android.content.Context;

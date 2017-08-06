@@ -2,7 +2,7 @@ package com.example.jurizo.bitacora.CoreBitacoraMVA.controllers;
 
 import android.content.Context;
 
-import com.example.jurizo.bitacora.CoreBitacoraMVA.dataAccessLayer.SessionDAO;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.dataAccessObject.SessionDAO;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.models.Session;
 
 /**

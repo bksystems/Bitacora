@@ -3,8 +3,8 @@ package com.example.jurizo.bitacora.CoreBitacoraMVA.controllers;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.jurizo.bitacora.CoreBitacoraMVA.dataAccessLayer.LogsDAO;
-import com.example.jurizo.bitacora.CoreBitacoraMVA.dataAccessLayer.UserDAO;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.dataAccessObject.LogsDAO;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.dataAccessObject.UserDAO;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.database.SynchronizationService.ConfigServerConnection;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.models.Session;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.models.User;
