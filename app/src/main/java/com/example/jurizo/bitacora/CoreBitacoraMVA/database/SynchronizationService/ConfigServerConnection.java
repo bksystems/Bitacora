@@ -14,8 +14,8 @@ public class ConfigServerConnection {
     private final static String URLLogin = hostname + port + pathServices +  "users/login.ini.php";
     private final static String URLGetDepartments = hostname + port + pathServices + "departments/get_departments.php";
     private final static String URLGetSegments = hostname + port + pathServices + "segments/get_departments.php";
-    private final static String URLGetQuestionSegments = hostname + port + pathServices + "question_segments/get_departments.php";
-    private final static String URLGetAnswareSegments = hostname + port + pathServices + "answare_querstion_segments/get_departments.php";
+    private final static String URLGetQuestionSegments = hostname + port + pathServices + "question_segments/get_questions_segments.php";
+    private final static String URLGetAnswareSegments = hostname + port + pathServices + "answers_segments/get_answers_segments.php";
     private final static String URLGetOffices= hostname + port + pathServices + "offices/get_offices.php";
 
     public static String getHostname() {
@@ -41,5 +41,9 @@ public class ConfigServerConnection {
 
     public static String getURLOffices() {
         return URLGetOffices;
+    }
+
+    public static String getURLSegments() {
+        return URLGetSegments;
     }
 }

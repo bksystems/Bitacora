@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.AnswersSegmentController;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.DepartmentController;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.LogsController;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.OfficesController;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.QuestionSegmentController;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.SegmentController;
@@ -25,16 +26,16 @@ import com.example.jurizo.bitacora.PrincipalActivity;
  */
 
 public class LoginSync extends AsyncTask<String, String, User> {
-
-    private String TAG = getClass().getSimpleName();
+    private String TAG = "SyncLogin";
+    private String TAGCLass = getClass().getSimpleName();
     private Context context;
     private ProgressDialog progressDialog;
 
-    private static String hostname = ConfigServerConnection.getHostname();
+    /*private static String hostname = ConfigServerConnection.getHostname();
     private static String port = ConfigServerConnection.getPort();
     private static String pathSyncFiles = ConfigServerConnection.getPathSyncFiles();
 
-    private DBHelper dbHelper;
+    private DBHelper dbHelper;*/
     private AlertDialog alertDialog;
 
     public LoginSync(Context context) {
@@ -109,6 +110,7 @@ public class LoginSync extends AsyncTask<String, String, User> {
                 return usr;
             }
         } catch (Exception ex) {
+            LogsController.LogError(TAG, TAGCLass, ex.getMessage(), context);
             ex.printStackTrace();
         }
         return null;
