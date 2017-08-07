@@ -60,7 +60,7 @@ public class OfficeDAO {
             String region = cursor.getString(5);
             String office = cursor.getString(6);
             String telephone_company = cursor.getString(7);
-            boolean already_renewed = Boolean.parseBoolean(cursor.getString(8));
+            int already_renewed = Integer.parseInt(cursor.getString(8));
             int segment_logistics = Integer.parseInt(cursor.getString(9));
             int segment_mobility = Integer.parseInt(cursor.getString(10));
             int active_employees = Integer.parseInt(cursor.getString(11));

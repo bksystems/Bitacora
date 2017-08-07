@@ -15,7 +15,7 @@ public class Office {
     private String region;
     private String office;
     private String telephone_company;
-    private boolean already_renewed;
+    private int already_renewed;
     private int segment_logistics;
     private int segment_mobility;
     private int active_employees;
@@ -29,7 +29,7 @@ public class Office {
     public Office() {
     }
 
-    public Office(int id, int cost_center, int eco_identifier, String direcction, String subdirection, String region, String office, String telephone_company, boolean already_renewed, int segment_logistics, int segment_mobility, int active_employees, int authorized_employees, int devices_assigned, float latitude, float longitude, Date created, Date modified) {
+    public Office(int id, int cost_center, int eco_identifier, String direcction, String subdirection, String region, String office, String telephone_company, int already_renewed, int segment_logistics, int segment_mobility, int active_employees, int authorized_employees, int devices_assigned, float latitude, float longitude, Date created, Date modified) {
         this.id = id;
         this.cost_center = cost_center;
         this.eco_identifier = eco_identifier;
@@ -114,11 +114,11 @@ public class Office {
         this.telephone_company = telephone_company;
     }
 
-    public boolean isAlready_renewed() {
+    public int isAlready_renewed() {
         return already_renewed;
     }
 
-    public void setAlready_renewed(boolean already_renewed) {
+    public void setAlready_renewed(int already_renewed) {
         this.already_renewed = already_renewed;
     }
 

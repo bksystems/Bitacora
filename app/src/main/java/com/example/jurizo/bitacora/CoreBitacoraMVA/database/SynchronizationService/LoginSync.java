@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.AnswersSegmentController;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.DepartmentController;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.EmployeeController;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.LogsController;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.OfficesController;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.QuestionSegmentController;
@@ -17,6 +18,7 @@ import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.SessionController
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.UserController;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.database.DBHelper;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.database.SessionManagement;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.models.Employee;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.models.Session;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.models.User;
 import com.example.jurizo.bitacora.PrincipalActivity;
@@ -44,6 +46,7 @@ public class LoginSync extends AsyncTask<String, String, User> {
 
     @Override
     protected User doInBackground(String... params) {
+        User usr = null;
         try {
             String username = params[0];
             String password = params[1];
@@ -58,28 +61,58 @@ public class LoginSync extends AsyncTask<String, String, User> {
             publishProgress("Validando credenciales ingresadas..");
             UserController usrController = new UserController(context);
             //Primero validamos si ya se encuentra registrado
-            User usr = usrController.UserValidateOffLine(username, password);
+            usr = usrController.UserValidateOffLine(username, password);
             if (usr == null) {
                 usr = usrController.UserValidateOnLine(username, password, access_type, access_system, ip_address, serial_number, imei, sim_card_number);
                 if (usr != null) {
+                    boolean session_is_valid = false;
+                    boolean load_employees = false;
+                    boolean load_departments = false;
+                    boolean load_segments = false;
+                    boolean load_answers = false;
+                    boolean load_questions = false;
+                    boolean load_offices = false;
+
                     publishProgress("Validando sesión activa..");
                     SessionController sessionController = new SessionController(context);
                     Session session = sessionController.get_Final_Session(usr.getId());
+
+                    publishProgress("Validando detalles del usuario");
+                    EmployeeController employeeController = new EmployeeController(context);
+                    Employee empLogeado = employeeController.getEmployeeLoginByServer(usr.getEmployee_id());
+                    publishProgress("Descargando lista de empleados asignados");
+                    load_employees = employeeController.Download_Update_Employee(usr.getUsername(), empLogeado);
+
                     publishProgress("Descargando catalogos principales, (Departamentos)...");
                     DepartmentController departmentController = new DepartmentController(context);
-                    departmentController.Download_Update_Department(usr.getUsername());
+                    load_departments = departmentController.Download_Update_Department(usr.getUsername());
+
                     publishProgress("Descargando catalogos principales, (Segmentos)...");
                     SegmentController segmentController = new SegmentController(context);
-                    segmentController.Download_Update_Segments(usr.getUsername());
+                    load_segments = segmentController.Download_Update_Segments(usr.getUsername());
+
                     publishProgress("Descargando catalogos principales, (Preguntas)...");
                     QuestionSegmentController questionsegmentController = new QuestionSegmentController(context);
-                    questionsegmentController.Download_Update_Questions(usr.getUsername());
+                    load_questions = questionsegmentController.Download_Update_Questions(usr.getUsername());
+
                     publishProgress("Descargando catalogos principales, (Respuestas)...");
                     AnswersSegmentController answersSegmentController = new AnswersSegmentController(context);
-                    answersSegmentController.Download_Update_Answers(usr.getUsername());
+                    load_answers = answersSegmentController.Download_Update_Answers(usr.getUsername());
+
                     publishProgress("Descargando catalogos principales, (Oficinas)...");
                     OfficesController officesController = new OfficesController(context);
-                    officesController.Download_Update_Offices(usr.getUsername());
+                    load_offices = officesController.Download_Update_Offices(usr.getUsername());
+
+                    publishProgress("Descargando las visitas generadas");
+
+                    if(session_is_valid == true && load_employees == true && load_departments == true &&
+                            load_segments == true && load_questions == true &&
+                            load_answers == true && load_offices == true){
+
+                    }else{
+                        usr.setStatus_user_id(5);
+                        LogsController.LogError(TAG, TAGCLass, "Fallo la carga de la información", context);
+                    }
 
                 /*publishProgress("Actualizando información de usuarios");
                 List<EntityUser> users = new ArrayList<>();
@@ -113,7 +146,7 @@ public class LoginSync extends AsyncTask<String, String, User> {
             LogsController.LogError(TAG, TAGCLass, ex.getMessage(), context);
             ex.printStackTrace();
         }
-        return null;
+        return usr;
     }
 
 
@@ -150,8 +183,10 @@ public class LoginSync extends AsyncTask<String, String, User> {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
-
-
+                case 5:
+                    alertDialog.setMessage("Fallo la descarga de la información, por favor intentalo nuevamente");
+                    alertDialog.show();
+                    break;
             }
         } else {
             //alertDialog.setMessage("Usuario o contraseña incorrecta");

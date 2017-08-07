@@ -6,7 +6,7 @@ package com.example.jurizo.bitacora.CoreBitacoraMVA.database.tables;
 
 public class TableOffice {
 
-    public static String TableName = "Offices";
+    public static String TableName = "offices";
 
     private static String Office_id = "id integer primary key autoincrement, ";
     private static String Office_cost_center = "cost_center integer not null, ";

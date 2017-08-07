@@ -32,7 +32,7 @@ public class UserDAO {
         try {
             String query = "select * from users where username = " + username + " and password like '" + password + "'";
             Cursor cursor = db.rawQuery(query, null);
-            if (cursor != null) {
+            if (cursor != null && cursor.getCount() > 0) {
                 int id = Integer.parseInt(cursor.getString(0));
                 int employee_id = Integer.parseInt(cursor.getString(1));
                 String username_d = cursor.getString(2);
@@ -43,6 +43,8 @@ public class UserDAO {
                 String modified = cursor.getString(7);
 
                 user = new User(id, employee_id, username_d, password_d, status_user_id, rol_id, created, modified);
+            }else{
+                user = null;
             }
         } catch (Exception ex) {
             user = null;

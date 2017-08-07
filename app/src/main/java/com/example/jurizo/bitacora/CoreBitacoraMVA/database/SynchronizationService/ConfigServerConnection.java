@@ -13,10 +13,12 @@ public class ConfigServerConnection {
     //Rutas para Users
     private final static String URLLogin = hostname + port + pathServices +  "users/login.ini.php";
     private final static String URLGetDepartments = hostname + port + pathServices + "departments/get_departments.php";
-    private final static String URLGetSegments = hostname + port + pathServices + "segments/get_departments.php";
+    private final static String URLGetSegments = hostname + port + pathServices + "segments/get_segments.php";
     private final static String URLGetQuestionSegments = hostname + port + pathServices + "question_segments/get_questions_segments.php";
     private final static String URLGetAnswareSegments = hostname + port + pathServices + "answers_segments/get_answers_segments.php";
     private final static String URLGetOffices= hostname + port + pathServices + "offices/get_offices.php";
+    private final static String URLGetEmployees= hostname + port + pathServices + "employees/get_employees_app.php";
+    private final static String URLGetEmployeeById= hostname + port + pathServices + "employees/get_employees_by_id.php";
 
     public static String getHostname() {
         return hostname;
@@ -45,5 +47,17 @@ public class ConfigServerConnection {
 
     public static String getURLSegments() {
         return URLGetSegments;
+    }
+
+    public static String getURLQuestionSegments(){return URLGetQuestionSegments; }
+
+    public static String getURLAnswareSegments(){return URLGetAnswareSegments; }
+
+    public static String getURLEmployees() {
+        return URLGetEmployees;
+    }
+
+    public static String getURLEmployeeById() {
+        return URLGetEmployeeById;
     }
 }

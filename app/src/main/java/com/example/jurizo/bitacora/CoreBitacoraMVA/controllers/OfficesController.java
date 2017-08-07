@@ -8,8 +8,10 @@ import com.example.jurizo.bitacora.CoreBitacoraMVA.dataAccessObject.OfficeDAO;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.database.SynchronizationService.ConfigServerConnection;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.database.SynchronizationService.HttpHandler;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.models.Office;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.models.Segment;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -88,45 +90,54 @@ public class OfficesController {
         return result;
     }
 
+
     private List<Office> JSON_Parse_Office(String jsonResponse) {
         List<Office> offices = null;
-        try{
+        try {
             JSONObject jsonObj = new JSONObject(jsonResponse);
-            JSONArray jsonSuccess = jsonObj.getJSONArray("success");
-            if(jsonSuccess.get(0) == "true"){
+            JSONArray jsonOfficesData = jsonObj.getJSONArray("data");
+            if (jsonOfficesData.length() > 0) {
+                for (int i = 0; i < jsonOfficesData.length(); i++) {
+                    JSONObject itemObj = jsonOfficesData.getJSONObject(i);
+                    boolean result = itemObj.getBoolean("success");
+                    if(result) {
+                        offices = new ArrayList<>();
+                        JSONArray jsonOfficesOffice = itemObj.getJSONArray("offices");
+                        for(int j = 0; j < jsonOfficesOffice.length(); j++){
+                            JSONObject itemObjOffice = jsonOfficesOffice.getJSONObject(j);
+                            int id = itemObjOffice.getInt("id");
+                            int cost_center = itemObjOffice.getInt("cost_center");
+                            int eco_identifier = itemObjOffice.getInt("eco_identifier");
+                            String direcction = itemObjOffice.getString("direcction").trim();
+                            String subdirection = itemObjOffice.getString("subdirection").trim();
+                            String region = itemObjOffice.getString("region").trim();
+                            String office = itemObjOffice.getString("office").trim();
+                            String telephone_company = itemObjOffice.getString("telephone_company").trim();
+                            int already_renewed = itemObjOffice.getInt("already_renewed");
+                            int segment_logistics = itemObjOffice.getInt("segment_logistics");
+                            int segment_mobility = itemObjOffice.getInt("segment_mobility");
+                            int active_employees = itemObjOffice.getInt("active_employees");
+                            int authorized_employees = itemObjOffice.getInt("authorized_employees");
+                            int devices_assigned = itemObjOffice.getInt("devices_assigned");
+                            float latitude = Float.parseFloat(itemObjOffice.getString("latitude"));
+                            float longitude = Float.parseFloat(itemObjOffice.getString("longitude"));
+                            Date created  = null;
+                            Date modified = null;
+                            Office ofi = new Office(id, cost_center, eco_identifier, direcction, subdirection, region, office,
+                                    telephone_company, already_renewed, segment_logistics, segment_mobility, active_employees,
+                                    authorized_employees, devices_assigned, latitude, longitude, created, modified);
+                            offices.add(ofi);
+                        }
 
-            }
-
-            offices = new ArrayList<>();
-
-                for (int i = 0; i < jsonSuccess.length(); i++) {
-
-                    JSONObject osObj = jsonSuccess.getJSONObject(i);
-                    int id = osObj.getInt("id");
-                    int cost_center = osObj.getInt("cost_center");
-                    int eco_identifier = osObj.getInt("eco_identifier");
-                    String direcction = osObj.getString("direcction").trim();
-                    String subdirection = osObj.getString("subdirection").trim();
-                    String region = osObj.getString("region").trim();
-                    String office = osObj.getString("office").trim();
-                    String telephone_company = osObj.getString("telephone_company").trim();
-                    boolean already_renewed = osObj.getBoolean("already_renewed");
-                    int segment_logistics = osObj.getInt("segment_logistics");
-                    int segment_mobility = osObj.getInt("segment_mobility");
-                    int active_employees = osObj.getInt("active_employees");
-                    int authorized_employees = osObj.getInt("authorized_employees");
-                    int devices_assigned = osObj.getInt("devices_assigned");
-                    float latitude = Float.parseFloat(osObj.getString("latitude"));
-                    float longitude = Float.parseFloat(osObj.getString("longitude"));
-                    Date created  = null;
-                    Date modified = null;
-                    Office ofi = new Office(id, cost_center, eco_identifier, direcction, subdirection, region, office,
-                            telephone_company, already_renewed, segment_logistics, segment_mobility, active_employees,
-                            authorized_employees, devices_assigned, latitude, longitude, created, modified);
-                    offices.add(ofi);
+                    }else{
+                        offices = null;
+                    }
                 }
-        }catch (Exception ex){
-            Log.d(TAG, ex.getMessage());
+            } else {
+                offices = null;
+            }
+        } catch (final JSONException ex) {
+            Log.e("ParseOffices", "Json parsing error: " + ex.getMessage());
             LogsDAO logs = new LogsDAO(TAG, TAGClass, ex.getMessage(), context);
         }
         return offices;

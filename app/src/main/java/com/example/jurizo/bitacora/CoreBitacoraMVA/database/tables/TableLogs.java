@@ -6,7 +6,7 @@ package com.example.jurizo.bitacora.CoreBitacoraMVA.database.tables;
 
 public class TableLogs {
 
-    public static String TableName = "Logs";
+    public static String TableName = "logs";
 
     private static String Logs_id = "id integer primary key autoincrement, ";
     private static String Logs_tag = "tag text null, ";

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.jurizo.bitacora.Controls.Utils;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.database.DBHelper;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.database.tables.TableLogs;
 
@@ -28,7 +29,7 @@ public class LogsDAO {
         values.put("tag", tag);
         values.put("class", tagClass);
         values.put("error", message);
-        values.put("datetime", "");
+        values.put("datetime", Utils.GetDateTime());
         values.put("isLoad", 0);
         if (db.isOpen()) {
             db.insert(TableLogs.TableName, null, values);

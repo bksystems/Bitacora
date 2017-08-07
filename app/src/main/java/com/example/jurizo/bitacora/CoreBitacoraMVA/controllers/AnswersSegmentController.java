@@ -32,7 +32,7 @@ public class AnswersSegmentController {
         boolean result = false;
         try {
             HttpHandler httpHandler = new HttpHandler();
-            String jsonResponse = httpHandler.makeServicesCall(ConfigServerConnection.getURLDepartmanets());
+            String jsonResponse = httpHandler.makeServicesCall(ConfigServerConnection.getURLAnswareSegments());
             List<AnswerSegment> answerSegments = JSON_Parse_AnswerSegments(jsonResponse);
             if(answerSegments != null && answerSegments.size() > 0){
                 if(updateAllAnswerSegments(answerSegments)){
@@ -67,7 +67,7 @@ public class AnswersSegmentController {
                     boolean result = itemObj.getBoolean("success");
                     if(result) {
                         answerSegments = new ArrayList<>();
-                        JSONArray jsonAnswerSegmentsQuestions = itemObj.getJSONArray("questions_segments");
+                        JSONArray jsonAnswerSegmentsQuestions = itemObj.getJSONArray("answers_segments");
                         for(int j = 0; j < jsonAnswerSegmentsQuestions.length(); j++){
                             JSONObject itemObjAnswerSegment = jsonAnswerSegmentsQuestions.getJSONObject(j);
                             int id = itemObjAnswerSegment.getInt("id");
@@ -79,15 +79,6 @@ public class AnswersSegmentController {
                             AnswerSegment objAnswerSegment = new AnswerSegment(id, questions_segment_id, answare, active, created, modified);
                             answerSegments.add(objAnswerSegment);
 
-
-                            /*Questions
-                            "id": "1",
-
-                                    "segment_id": "1",
-                                    "question": "¿Usted ocupa ECO WEB?",
-                                    "active": "1",
-                                    "created": "2017-08-01 00:00:00",
-                                    "modified": "2017-08-01 00:00:00"*/
                         }
 
                     }else{
