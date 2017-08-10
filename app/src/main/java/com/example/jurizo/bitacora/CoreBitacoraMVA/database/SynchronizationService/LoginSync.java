@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.example.jurizo.bitacora.Controls.Utils;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.AnswersSegmentController;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.DepartmentController;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.EmployeeController;
@@ -32,12 +33,6 @@ public class LoginSync extends AsyncTask<String, String, User> {
     private String TAGCLass = getClass().getSimpleName();
     private Context context;
     private ProgressDialog progressDialog;
-
-    /*private static String hostname = ConfigServerConnection.getHostname();
-    private static String port = ConfigServerConnection.getPort();
-    private static String pathSyncFiles = ConfigServerConnection.getPathSyncFiles();
-
-    private DBHelper dbHelper;*/
     private AlertDialog alertDialog;
 
     public LoginSync(Context context) {
@@ -62,20 +57,21 @@ public class LoginSync extends AsyncTask<String, String, User> {
             UserController usrController = new UserController(context);
             //Primero validamos si ya se encuentra registrado
             usr = usrController.UserValidateOffLine(username, password);
-            if (usr == null) {
-                usr = usrController.UserValidateOnLine(username, password, access_type, access_system, ip_address, serial_number, imei, sim_card_number);
-                if (usr != null) {
-                    boolean session_is_valid = false;
-                    boolean load_employees = false;
-                    boolean load_departments = false;
-                    boolean load_segments = false;
-                    boolean load_answers = false;
-                    boolean load_questions = false;
-                    boolean load_offices = false;
+            publishProgress("Validando sesión activa..");
+            SessionController sessionController = new SessionController(context);
+            Session session = sessionController.get_Final_Session(usr.getId());
+            boolean session_is_valid = Utils.SessionValidate(session);
 
-                    publishProgress("Validando sesión activa..");
-                    SessionController sessionController = new SessionController(context);
-                    Session session = sessionController.get_Final_Session(usr.getId());
+            if(usr == null || session_is_valid == false) {
+                publishProgress("Iniciando sesión en el servidor");
+                usr = usrController.UserValidateOnLine(username, password, access_type, access_system, ip_address, serial_number, imei, sim_card_number);
+                if(usr!=null) {
+                    boolean load_employees;
+                    boolean load_departments;
+                    boolean load_segments;
+                    boolean load_answers;
+                    boolean load_questions;
+                    boolean load_offices;
 
                     publishProgress("Validando detalles del usuario");
                     EmployeeController employeeController = new EmployeeController(context);
@@ -105,43 +101,23 @@ public class LoginSync extends AsyncTask<String, String, User> {
 
                     publishProgress("Descargando las visitas generadas");
 
-                    if(session_is_valid == true && load_employees == true && load_departments == true &&
+                    if (session_is_valid == true && load_employees == true && load_departments == true &&
                             load_segments == true && load_questions == true &&
-                            load_answers == true && load_offices == true){
+                            load_answers == true && load_offices == true) {
 
-                    }else{
+                    } else {
                         usr.setStatus_user_id(5);
                         LogsController.LogError(TAG, TAGCLass, "Fallo la carga de la información", context);
                     }
 
-                /*publishProgress("Actualizando información de usuarios");
-                List<EntityUser> users = new ArrayList<>();
-                users.add(user);
-                int consecutivo = 0;
-                while (consecutivo < users.size()) {
-                    int usrId = users.get(consecutivo).getId();
-                    List<EntityUser> usrAsignated = getUserAsignated(usrId);
-                    if (usrAsignated != null && usrAsignated.size() > 0) {
-                        users.addAll(usrAsignated);
-                    }
-                    consecutivo++;
+                    return usr;
+                }else{
+                    usr = null;
                 }
-                DAO_Users daoUsers = new DAO_Users(context);
-                daoUsers.insertUsers(users);
-
-
-                publishProgress("Descargando visitas guardas en sistema");
-                List<EntityVisita> visitas = getVisitasServer(ConfigServerConnection.getURLVisitas(), users);
-                if (visitas != null && visitas.size() > 0) {
-                    publishProgress("Procesando visitas..");
-                    DAO_Visits dao_visits = new DAO_Visits(context);
-                    dao_visits.insertVisitas(visitas);
-                }*/
-                }
-
-
+            }else{
                 return usr;
             }
+
         } catch (Exception ex) {
             LogsController.LogError(TAG, TAGCLass, ex.getMessage(), context);
             ex.printStackTrace();
@@ -154,8 +130,6 @@ public class LoginSync extends AsyncTask<String, String, User> {
     protected void onPreExecute() {
         alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle("Login Status");
-
-
         progressDialog = new ProgressDialog(context);
         progressDialog.setTitle("Inicio de sesión");
         progressDialog.setMessage("Conectando con el servidor");

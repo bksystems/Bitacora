@@ -63,6 +63,7 @@ public class SessionDAO {
             String query = "select * from "+ TableSessions.TableName + " where user_id = " + idSearch;
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null) {
+                cursor.moveToFirst();
                 int id = Integer.parseInt(cursor.getString(0));
                 int user_id = Integer.parseInt(cursor.getString(1));
                 String tocken = cursor.getString(2);

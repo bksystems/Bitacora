@@ -85,7 +85,7 @@ public class PrincipalActivity extends AppCompatActivity {
         ActionBar bar = getSupportActionBar();
         bar.setTitle("Bitacora");
         bar.setSubtitle("Visitas realizadas");
-        bar.setDisplayHomeAsUpEnabled(true);
+        //bar.setDisplayHomeAsUpEnabled(true);
 
     }
 

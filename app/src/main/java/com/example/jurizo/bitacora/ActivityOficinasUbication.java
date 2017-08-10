@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 
+import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.OfficesController;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.models.Office;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,7 +53,7 @@ public class ActivityOficinasUbication extends AppCompatActivity
         LoadOficcesTheMap loadOficcesTheMap = new LoadOficcesTheMap();
         loadOficcesTheMap.execute();
 
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        /*locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
         mprovider = locationManager.getBestProvider(criteria, false);
@@ -67,7 +69,7 @@ public class ActivityOficinasUbication extends AppCompatActivity
             onLocationChanged(location);
         } else {
             Toast.makeText(getBaseContext(), "No Location Provider Found Check Your Code", Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
     }
 
@@ -139,17 +141,20 @@ public class ActivityOficinasUbication extends AppCompatActivity
 
         @Override
         protected Void doInBackground(String... params) {
-           /* DAO_Oficinas daoOficinas = new DAO_Oficinas(context);
-            List<EntityOficina> oficinas = daoOficinas.getOficinas();
-            markersArray = new ArrayList<>();
-
-            for (EntityOficina os : oficinas) {
-                markersArray.add(new MarkerOptions()
-                        .position(new LatLng(os.getLatitud(), os.getLongitud()))
-                        .anchor(0.5f, 0.5f)
-                        .title(os.getCc() + "-" + os.getOficina())
-                        .snippet(os.getRegion()));
-            }*/
+            OfficesController officesController = new OfficesController(context);
+            List<Office> offices = officesController.getOfficesDataBase();
+            if(offices != null && offices.size() > 0){
+                markersArray = new ArrayList<>();
+                for(Office ofi : offices){
+                    markersArray.add(
+                        new MarkerOptions()
+                            .position(new LatLng(ofi.getLatitude(), ofi.getLongitude()))
+                            .anchor(0.5f, 0.5f)
+                            .title(ofi.getCost_center() + " - "+ ofi.getOffice())
+                            .snippet(ofi.getRegion())
+                    );
+                }
+            }
             return null;
         }
 

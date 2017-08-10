@@ -10,6 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
+import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.OfficesController;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.models.Office;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -36,15 +44,20 @@ public class VisitGeneralFragment extends Fragment {
         AutoCompleteTextView autoCompleteTextViewOficinas;
         autoCompleteTextViewOficinas = (AutoCompleteTextView) rootView.findViewById(R.id.visit_general_oficinas);
 
-        /*DAO_Oficinas daoOficinas = new DAO_Oficinas(getContext());
-        List<EntityOficina> oficinas = daoOficinas.getOficinas();
-        String[] oficinasArray = new String[oficinas.size()];
-        for (int i =0; i < oficinas.size(); i++){
-            oficinasArray[i] = oficinas.get(i).getOficina();
+        OfficesController officesController = new OfficesController(getContext());
+        List<Office> offices = officesController.getOfficesDataBase();
+        if(offices != null && offices.size() > 0){
+            List<String> officesArray = new ArrayList<>();
+            for(Office ofi : offices){
+                officesArray.add(ofi.getOffice());
+            }
+            if(officesArray != null && officesArray.size() > 0){
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, officesArray);
+                autoCompleteTextViewOficinas.setAdapter(adapter);
+            }
+
+
         }
-        ArrayAdapter<String> adapter = null;
-        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, oficinasArray);
-        autoCompleteTextViewOficinas.setAdapter(adapter);*/
     }
 
     @Override

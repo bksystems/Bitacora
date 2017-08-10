@@ -33,6 +33,7 @@ public class UserDAO {
             String query = "select * from users where username = " + username + " and password like '" + password + "'";
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null && cursor.getCount() > 0) {
+                cursor.moveToFirst();
                 int id = Integer.parseInt(cursor.getString(0));
                 int employee_id = Integer.parseInt(cursor.getString(1));
                 String username_d = cursor.getString(2);
