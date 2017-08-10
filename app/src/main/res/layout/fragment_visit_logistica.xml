@@ -2,8 +2,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="20dp"
     tools:context="com.example.jurizo.bitacora.VisitLogisticaFragment">
 
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+
+        <RelativeLayout
+            android:id="@+id/visita_container_questions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="2dp">
+
+            <TextView
+                android:id="@+id/movilidad_question_one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="Aquí se mencionara la primer pregunta" />
+
+            <Spinner
+                android:id="@+id/movilidad_spinner_question_one"
+                android:layout_below="@+id/movilidad_question_one"
+                android:layout_width="match_parent"
+                android:padding="3dp"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:id="@+id/movilidad_question_two"
+                android:layout_below="@+id/movilidad_spinner_question_one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="Aquí se mencionara la segunda pregunta" />
+
+            <Spinner
+                android:id="@+id/movilidad_spinner_question_two"
+                android:layout_below="@+id/movilidad_question_two"
+                android:layout_width="match_parent"
+                android:padding="3dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/movilidad_question_three"
+                android:layout_below="@+id/movilidad_spinner_question_two"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="Aquí se mencionara la tercera pregunta" />
+
+            <Spinner
+                android:id="@+id/movilidad_spinner_question_three"
+                android:layout_below="@+id/movilidad_question_three"
+                android:layout_width="match_parent"
+                android:padding="3dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/movilidad_question_four"
+                android:layout_below="@+id/movilidad_spinner_question_three"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="Aquí se mencionara la cuarta pregunta" />
+
+            <Spinner
+                android:id="@+id/movilidad_spinner_question_four"
+                android:layout_below="@+id/movilidad_question_four"
+                android:layout_width="match_parent"
+                android:padding="3dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/movilidad_question_five"
+                android:layout_below="@+id/movilidad_spinner_question_four"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="Aquí se mencionara la quinta pregunta" />
+
+            <Spinner
+                android:id="@+id/movilidad_spinner_question_five"
+                android:layout_below="@+id/movilidad_question_five"
+                android:layout_width="match_parent"
+                android:padding="3dp"
+                android:layout_height="wrap_content" />
+
+
+        </RelativeLayout>
+
+
+    </ScrollView>
 </FrameLayout>

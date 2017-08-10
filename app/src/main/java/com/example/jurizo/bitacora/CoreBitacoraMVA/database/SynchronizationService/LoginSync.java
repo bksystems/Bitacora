@@ -57,11 +57,16 @@ public class LoginSync extends AsyncTask<String, String, User> {
             UserController usrController = new UserController(context);
             //Primero validamos si ya se encuentra registrado
             usr = usrController.UserValidateOffLine(username, password);
+            Session session = null;
             publishProgress("Validando sesión activa..");
-            SessionController sessionController = new SessionController(context);
-            Session session = sessionController.get_Final_Session(usr.getId());
-            boolean session_is_valid = Utils.SessionValidate(session);
-
+            if(usr != null) {
+                SessionController sessionController = new SessionController(context);
+                session = sessionController.get_Final_Session(usr.getId());
+            }
+            boolean session_is_valid = false;
+            if(session != null){
+                session_is_valid = Utils.SessionValidate(session);
+            }
             if(usr == null || session_is_valid == false) {
                 publishProgress("Iniciando sesión en el servidor");
                 usr = usrController.UserValidateOnLine(username, password, access_type, access_system, ip_address, serial_number, imei, sim_card_number);

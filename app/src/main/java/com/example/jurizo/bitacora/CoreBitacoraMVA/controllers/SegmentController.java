@@ -93,4 +93,9 @@ public class SegmentController {
         }
         return segments;
     }
+
+    public Segment getSegmentById(int segment_id) {
+        SegmentDAO segmentDAO = new SegmentDAO(context);
+        return segmentDAO.getSegmentById(segment_id);
+    }
 }

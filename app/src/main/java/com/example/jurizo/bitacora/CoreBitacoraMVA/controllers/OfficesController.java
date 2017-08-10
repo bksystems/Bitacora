@@ -143,4 +143,8 @@ public class OfficesController {
         return offices;
     }
 
+    public Office GetOfficeByName(String os) {
+        OfficeDAO officeDAO = new OfficeDAO(context);
+        return  officeDAO.getOfficeByName(os);
+    }
 }

@@ -194,4 +194,22 @@ public class OfficeDAO {
             return 0;
         }
     }
+
+    public Office getOfficeByName(String os) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        Office ofcObj = null;
+        try {
+            String query = "select * from " + TableOffice.TableName + " where office like '" + os + "'";
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                ofcObj = CreateParseObject(cursor);
+            }
+        }catch (Exception ex){
+            ofcObj = null;
+            Log.d(TAG, ex.getMessage());
+            LogsDAO logs = new LogsDAO(TAG, TAGClass, ex.getMessage(), context);
+        }
+        return ofcObj;
+    }
 }
