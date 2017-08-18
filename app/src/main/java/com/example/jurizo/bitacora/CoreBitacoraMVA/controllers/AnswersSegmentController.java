@@ -94,4 +94,9 @@ public class AnswersSegmentController {
         }
         return answerSegments;
     }
+
+    public List<AnswerSegment> getAnswersQuestionsByIdQuestion(int id_question) {
+        AnswerSegmentDAO answerSegmentDAO = new AnswerSegmentDAO(context);
+        return  answerSegmentDAO.getAnswersByIdQuestion(id_question);
+    }
 }

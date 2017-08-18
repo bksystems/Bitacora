@@ -2,6 +2,7 @@ package com.example.jurizo.bitacora.CoreBitacoraMVA.dataAccessObject;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -9,6 +10,7 @@ import com.example.jurizo.bitacora.CoreBitacoraMVA.database.DBHelper;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.database.tables.TableAnswersSegment;
 import com.example.jurizo.bitacora.CoreBitacoraMVA.models.AnswerSegment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,5 +63,32 @@ public class AnswerSegmentDAO {
             LogsDAO logs = new LogsDAO(TAG, TAGClass, ex.getMessage(), context);
         }
         return result;
+    }
+
+    public List<AnswerSegment> getAnswersByIdQuestion(int id_question) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        List<AnswerSegment> answers = null;
+        try{
+            String query = "select * from " + TableAnswersSegment.TableName + " where questions_segment_id = " + id_question + " and active = 1";
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.getCount() > 0) {
+                answers = new ArrayList<>();
+                while (cursor.moveToNext()){
+                    int id = cursor.getInt(0);
+                    int question_segment_id = cursor.getInt(1);
+                    String answ = cursor.getString(2);
+                    int active = cursor.getInt(3);
+                    String created = cursor.getString(4);
+                    String modified = cursor.getString(5);
+                    AnswerSegment answer = new AnswerSegment(id, question_segment_id, answ, active, created, modified);
+                    answers.add(answer);
+                }
+            }
+        }catch (Exception ex){
+            answers = null;
+            Log.d(TAG, ex.getMessage());
+            LogsDAO logs = new LogsDAO(TAG, TAGClass, ex.getMessage(), context);
+        }
+        return answers;
     }
 }
