@@ -52,23 +52,20 @@ public class VisitGeneralFragment extends Fragment {
     private EditText txtPlantillaReal;
     private GoogleMap mMap;
     private MapView mapView;
+    private AutoCompleteTextView autoCompleteTextViewOficinas;
 
-    /*public static VisitGeneralFragment newInstance() {
-        VisitGeneralFragment fragment = new VisitGeneralFragment();
-        return fragment;
-    }*/
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     private void loadAutoCompleteOficinas() {
-        AutoCompleteTextView autoCompleteTextViewOficinas;
         autoCompleteTextViewOficinas = (AutoCompleteTextView) rootView.findViewById(R.id.visit_general_oficinas);
 
         final OfficesController officesController = new OfficesController(getContext());
-        List<Office> offices = officesController.getOfficesDataBase();
+        final List<Office> offices = officesController.getOfficesDataBase();
         if(offices != null && offices.size() > 0){
             List<String> officesArray = new ArrayList<>();
             for(Office ofi : offices){
@@ -83,7 +80,7 @@ public class VisitGeneralFragment extends Fragment {
                         String os = adapter.getItem(position);
                         Office officeSelected = officesController.GetOfficeByName(os);
                         if(officeSelected != null) {
-                            ((HelperBitacora) getActivity().getApplication()).setOfc(officeSelected);
+                            ((HelperBitacora) getActivity().getApplication()).setOffice(officeSelected);
                             if (officeSelected != null) {
                                 UpdateFragmentContent(officeSelected);
                             }
@@ -96,7 +93,7 @@ public class VisitGeneralFragment extends Fragment {
         }
     }
 
-    public void UpdateFragmentContent(Office officeSelected) {
+    private void UpdateFragmentContent(Office officeSelected) {
         if(officeSelected != null){
             SegmentController segmentController = new SegmentController(getContext());
             Segment sgmMovilidad = segmentController.getSegmentById(officeSelected.getSegment_mobility());
@@ -128,13 +125,15 @@ public class VisitGeneralFragment extends Fragment {
                 labelSegmentMV.setText(segmentMV.getSegment());
                 labelPlantillaAut.setText(String.valueOf(officeSelected.getAuthorized_employees()));
                 txtPlantillaReal.setText(String.valueOf(officeSelected.getActive_employees()));
-                UpdateMap(officeSelected);
+                autoCompleteTextViewOficinas.setText(officeSelected.getOffice());
+                //UpdateMap(officeSelected);
                 break;
         }
     }
 
-    private void UpdateMap(Office ofc) {
+    /*private void UpdateMap(Office ofc) {
         if(ofc != null) {
+
             LatLng point = new LatLng(ofc.getLatitude(), ofc.getLongitude());
             mMap.addMarker(new MarkerOptions()
                     .position(point)
@@ -142,7 +141,7 @@ public class VisitGeneralFragment extends Fragment {
             );
             mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
         }
-    }
+    }*/
 
 
     @Override
@@ -152,14 +151,18 @@ public class VisitGeneralFragment extends Fragment {
         loadAutoCompleteOficinas();
         initializeComponents();
         UpdateViewOfficeSelecte(null, null, null, 0);
-        mapView = (MapView) rootView.findViewById(R.id.visit_general_mapView);
+        /*mapView = (MapView) rootView.findViewById(R.id.visit_general_mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 setUpMap(googleMap);
             }
-        });
+        });*/
+        Office os =  ((HelperBitacora) getActivity().getApplication()).getOffice();
+        if(os != null){
+            UpdateFragmentContent(os);
+        }
         return rootView;
     }
 
@@ -175,7 +178,7 @@ public class VisitGeneralFragment extends Fragment {
         txtPlantillaReal = (EditText) rootView.findViewById(R.id.visit_general_txt_plantilla_real);
     }
 
-    @Override
+    /*@Override
     public void onDestroyView() {
         super.onDestroyView();
         mapView.onDestroy();
@@ -207,6 +210,6 @@ public class VisitGeneralFragment extends Fragment {
                 .position(new LatLng(0, 0))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
         );
-    }
+    }*/
 }
 

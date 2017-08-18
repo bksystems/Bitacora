@@ -1,5 +1,6 @@
 package com.example.jurizo.bitacora;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -17,56 +18,60 @@ import com.example.jurizo.bitacora.CoreBitacoraMVA.models.Office;
 
 public class VisitActivity extends AppCompatActivity {
 
-    private VisitGeneralFragment visitGeneralFragment;
-    private VisitMovilidadFragment visitMovilidadFragment;
-    private VisitSeguimientoFragment visitSeguimientoFragment;
-    private VisitLogisticaFragment visitPLFragment;
-    private Fragment mContent;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visit);
         setToolbar();
-        InitialiceFragments();
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
+        if(bottomNavigationView != null) {
 
-        if(savedInstanceState != null){
-            mContent = getSupportFragmentManager().getFragment(savedInstanceState, "");
+            Menu menu = bottomNavigationView.getMenu();
+            selectFragment(menu.getItem(0));
+            bottomNavigationView.setOnNavigationItemSelectedListener(
+                    new BottomNavigationView.OnNavigationItemSelectedListener() {
+                        @Override
+                        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                            selectFragment(item);
+                            return true;
+                        }
+                    });
+        }
+    }
+
+
+    private void selectFragment(MenuItem item) {
+        item.setChecked(true);
+        switch (item.getItemId()) {
+            case R.id.nav_visit_general:
+                pushFragment(new VisitGeneralFragment());
+                break;
+            case R.id.nav_visit_seguimiento:
+                pushFragment(new VisitSeguimientoFragment());
+                break;
+            case R.id.nav_visit_movilidad:
+                pushFragment(new VisitMovilidadFragment());
+                break;
+            case R.id.nav_visit_pl:
+                pushFragment(new VisitLogisticaFragment());
+                break;
+        }
+    }
+
+    private void pushFragment(Fragment fragment) {
+        if (fragment == null)
+            return;
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null) {
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            if (transaction != null) {
+                transaction.replace(R.id.visit_fragment_content, fragment);
+                transaction.commit();
+            }
         }
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView ) findViewById(R.id.navigation);
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment selectedFragment = null;
-                switch (item.getItemId()) {
-                    case R.id.nav_visit_general:
-                        selectedFragment = visitGeneralFragment;
-                        break;
-                    case R.id.nav_visit_seguimiento:
-                        selectedFragment = visitSeguimientoFragment;
-                        break;
-                    case R.id.nav_visit_movilidad:
-                        selectedFragment = visitMovilidadFragment;
-                        break;
-                    case R.id.nav_visit_pl:
-                        selectedFragment = visitPLFragment;
-                        break;
-                }
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.visit_fragment_content, selectedFragment);
-                transaction.commit();
-                return true;
-            }
-        });
-
-
-
-        //Manually displaying the first fragment - one time only
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.visit_fragment_content, visitGeneralFragment);
-        transaction.commit();
     }
 
     @Override
@@ -74,14 +79,6 @@ public class VisitActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
     }
-
-    private void InitialiceFragments() {
-        visitGeneralFragment = new VisitGeneralFragment();
-        visitMovilidadFragment = new VisitMovilidadFragment();
-        visitSeguimientoFragment = new VisitSeguimientoFragment();
-        visitPLFragment = new VisitLogisticaFragment();
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

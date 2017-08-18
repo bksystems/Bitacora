@@ -249,7 +249,7 @@
 
 
 
-                <com.google.android.gms.maps.MapView
+                <!--<com.google.android.gms.maps.MapView
                     android:id="@+id/visit_general_mapView"
                     android:paddingTop="30dp"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -258,7 +258,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginBottom="20dp" />
+                    android:layout_marginBottom="20dp" />-->
 
 
             </RelativeLayout>

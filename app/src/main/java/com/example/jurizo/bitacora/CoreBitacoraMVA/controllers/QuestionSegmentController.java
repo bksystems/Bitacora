@@ -95,4 +95,8 @@ public class QuestionSegmentController {
         return questionSegments;
     }
 
+    public List<QuestionSegment> getQuestionSegmentById(int id_segment) {
+        QuestionSegmentDAO questionSegmentDAO = new QuestionSegmentDAO(context);
+        return questionSegmentDAO.getQuestionById(id_segment);
+    }
 }

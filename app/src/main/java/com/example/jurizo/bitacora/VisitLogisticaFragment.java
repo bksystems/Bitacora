@@ -8,18 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.jurizo.bitacora.CoreBitacoraMVA.controllers.QuestionSegmentController;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.models.Office;
+import com.example.jurizo.bitacora.CoreBitacoraMVA.models.QuestionSegment;
+
+import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class VisitLogisticaFragment extends Fragment {
 
-
-   /* public static VisitLogisticaFragment newInstance() {
-        // Required empty public constructor
-        VisitLogisticaFragment fragment = new VisitLogisticaFragment();
-        return fragment;
-    }*/
+    private View rootView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,7 +31,20 @@ public class VisitLogisticaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_visit_logistica, container, false);
+        rootView = inflater.inflate(R.layout.fragment_visit_logistica, container, false);
+        Office os = ((HelperBitacora)getActivity().getApplication()).getOffice();
+        if(os != null){
+            updateQuestions(os);
+        }
+        return rootView;
+    }
+
+    private void updateQuestions(Office os) {
+        QuestionSegmentController qsc = new QuestionSegmentController(getContext());
+        List<QuestionSegment> qusSeg = qsc.getQuestionSegmentById(os.getSegment_logistics());
+        if(qusSeg != null){
+
+        }
     }
 
 }
