@@ -77,6 +77,7 @@ public class LoginSync extends AsyncTask<String, String, User> {
                     boolean load_answers;
                     boolean load_questions;
                     boolean load_offices;
+                    session_is_valid = true;
 
                     publishProgress("Validando detalles del usuario");
                     EmployeeController employeeController = new EmployeeController(context);

@@ -1,6 +1,7 @@
 package com.example.jurizo.bitacora;
 
 
+import android.app.Application;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -52,11 +53,10 @@ public class VisitGeneralFragment extends Fragment {
     private GoogleMap mMap;
     private MapView mapView;
 
-    public static VisitGeneralFragment newInstance() {
-        // Required empty public constructor
+    /*public static VisitGeneralFragment newInstance() {
         VisitGeneralFragment fragment = new VisitGeneralFragment();
         return fragment;
-    }
+    }*/
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,17 +82,26 @@ public class VisitGeneralFragment extends Fragment {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String os = adapter.getItem(position);
                         Office officeSelected = officesController.GetOfficeByName(os);
-                        if(officeSelected != null){
-                            SegmentController segmentController = new SegmentController(getContext());
-                            Segment sgmMovilidad = segmentController.getSegmentById(officeSelected.getSegment_mobility());
-                            Segment sgmLogistica = segmentController.getSegmentById(officeSelected.getSegment_logistics());
-                            UpdateViewOfficeSelecte(officeSelected, sgmLogistica, sgmMovilidad, 1);
+                        if(officeSelected != null) {
+                            ((HelperBitacora) getActivity().getApplication()).setOfc(officeSelected);
+                            if (officeSelected != null) {
+                                UpdateFragmentContent(officeSelected);
+                            }
                         }
                     }
                 });
             }
 
 
+        }
+    }
+
+    public void UpdateFragmentContent(Office officeSelected) {
+        if(officeSelected != null){
+            SegmentController segmentController = new SegmentController(getContext());
+            Segment sgmMovilidad = segmentController.getSegmentById(officeSelected.getSegment_mobility());
+            Segment sgmLogistica = segmentController.getSegmentById(officeSelected.getSegment_logistics());
+            UpdateViewOfficeSelecte(officeSelected, sgmLogistica, sgmMovilidad, 1);
         }
     }
 

@@ -15,11 +15,11 @@ import android.view.ViewGroup;
 public class VisitSeguimientoFragment extends Fragment {
 
 
-    public static VisitSeguimientoFragment newInstance() {
+    /*public static VisitSeguimientoFragment newInstance() {
         VisitSeguimientoFragment fragment = new VisitSeguimientoFragment();
         return fragment;
         // Required empty public constructor
-    }
+    }*/
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

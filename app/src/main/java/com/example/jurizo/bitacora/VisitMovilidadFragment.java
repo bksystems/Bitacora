@@ -15,11 +15,11 @@ import android.view.ViewGroup;
 public class VisitMovilidadFragment extends Fragment {
 
 
-    public static VisitMovilidadFragment newInstance() {
+    /*public static VisitMovilidadFragment newInstance() {
         // Required empty public constructor
         VisitMovilidadFragment fragment = new VisitMovilidadFragment();
         return fragment;
-    }
+    }*/
 
 
     @Override

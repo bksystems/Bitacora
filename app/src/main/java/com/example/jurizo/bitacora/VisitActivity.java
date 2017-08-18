@@ -1,5 +1,7 @@
 package com.example.jurizo.bitacora;
 
+import android.content.Context;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -11,13 +13,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.jurizo.bitacora.CoreBitacoraMVA.models.Office;
+
 public class VisitActivity extends AppCompatActivity {
+
+    private VisitGeneralFragment visitGeneralFragment;
+    private VisitMovilidadFragment visitMovilidadFragment;
+    private VisitSeguimientoFragment visitSeguimientoFragment;
+    private VisitLogisticaFragment visitPLFragment;
+    private Fragment mContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visit);
         setToolbar();
+        InitialiceFragments();
+
+        if(savedInstanceState != null){
+            mContent = getSupportFragmentManager().getFragment(savedInstanceState, "");
+        }
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView ) findViewById(R.id.navigation);
 
@@ -27,16 +42,16 @@ public class VisitActivity extends AppCompatActivity {
                 Fragment selectedFragment = null;
                 switch (item.getItemId()) {
                     case R.id.nav_visit_general:
-                        selectedFragment = VisitGeneralFragment.newInstance();
+                        selectedFragment = visitGeneralFragment;
                         break;
                     case R.id.nav_visit_seguimiento:
-                        selectedFragment = VisitSeguimientoFragment.newInstance();
+                        selectedFragment = visitSeguimientoFragment;
                         break;
                     case R.id.nav_visit_movilidad:
-                        selectedFragment = VisitMovilidadFragment.newInstance();
+                        selectedFragment = visitMovilidadFragment;
                         break;
                     case R.id.nav_visit_pl:
-                        selectedFragment = VisitLogisticaFragment.newInstance();
+                        selectedFragment = visitPLFragment;
                         break;
                 }
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -46,10 +61,25 @@ public class VisitActivity extends AppCompatActivity {
             }
         });
 
+
+
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.visit_fragment_content, VisitGeneralFragment.newInstance());
+        transaction.replace(R.id.visit_fragment_content, visitGeneralFragment);
         transaction.commit();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+    }
+
+    private void InitialiceFragments() {
+        visitGeneralFragment = new VisitGeneralFragment();
+        visitMovilidadFragment = new VisitMovilidadFragment();
+        visitSeguimientoFragment = new VisitSeguimientoFragment();
+        visitPLFragment = new VisitLogisticaFragment();
     }
 
 
@@ -77,4 +107,10 @@ public class VisitActivity extends AppCompatActivity {
         bar.setSubtitle("Capturar información");
         bar.setDisplayHomeAsUpEnabled(true);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
 }

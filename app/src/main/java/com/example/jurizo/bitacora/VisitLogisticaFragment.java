@@ -15,11 +15,11 @@ import android.view.ViewGroup;
 public class VisitLogisticaFragment extends Fragment {
 
 
-    public static VisitLogisticaFragment newInstance() {
+   /* public static VisitLogisticaFragment newInstance() {
         // Required empty public constructor
         VisitLogisticaFragment fragment = new VisitLogisticaFragment();
         return fragment;
-    }
+    }*/
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
