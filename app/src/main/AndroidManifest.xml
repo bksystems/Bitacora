@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.example.jurizo.bitacora.HelperBitacora"
+        android:name=".HelperBitacora"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_book"
         android:label="@string/app_name"
@@ -27,12 +27,15 @@
         <activity android:name=".PrincipalActivity" />
         <activity android:name=".VisitActivity" />
         <activity android:name=".SettingsActivity" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <activity
             android:name=".ActivityOficinasUbication"
-            android:label="@string/title_activity_oficinas_ubication"></activity>
+            android:label="@string/title_activity_oficinas_ubication" />
+        <activity android:name=".TracingActivity"></activity>
     </application>
 
 </manifest>
